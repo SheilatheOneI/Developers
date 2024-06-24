@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.containerr {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+* {
+  font-family: "Josefin Slab", serif;
+}

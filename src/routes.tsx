@@ -1,8 +1,13 @@
 import { useRoutes } from "react-router-dom";
-import PageLayout from "./layout/pages";
+
 import Signup from "./pages/signup";
 import Connect from "./pages/connect";
 import Profile from "./pages/userprofile";
+import Login from "./pages/login";
+// import Profile from "./pages/profile";
+import Landing from "./pages/landing";
+import PageLayout from "./layout/pages";
+import Admin from "./pages/admin";
 const Router = () => {
   const routes = useRoutes([
     {
@@ -10,8 +15,12 @@ const Router = () => {
       element: <PageLayout />,
       children: [
         {
+          index: true,
+          element: <Landing />,
+        },
+        {
           path: "userprofile/:id",
-          element: <Profile/>,
+          element: <Profile />,
         },
         {
           path: "signup",
@@ -21,6 +30,15 @@ const Router = () => {
           path: "connect",
           element: <Connect />,
         },
+        // {
+        //   path: "profile",
+        //   element: <Profile />,
+        // },
+        {
+          path: "login",
+          element: <Login />,
+        },
+        { path: "admin", element: <Admin /> },
       ],
     },
   ]);
