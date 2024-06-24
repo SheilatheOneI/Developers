@@ -1,6 +1,5 @@
 import Providers from "./provider";
 import Router from "./routes";
-
 const App = () => {
   return (
     <Providers>
@@ -8,5 +7,4 @@ const App = () => {
     </Providers>
   );
 };
-
 export default App;

@@ -1,5 +1,4 @@
 import { Link, Button } from "@nextui-org/react";
-
 const NavbarLayout = () => {
   return (
     <nav className=" bg-lapis  p-4">
