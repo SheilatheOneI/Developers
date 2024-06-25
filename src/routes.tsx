@@ -4,7 +4,6 @@ import Signup from "./pages/signup";
 import Connect from "./pages/connect";
 import Profile from "./pages/userprofile";
 import Login from "./pages/login";
-// import Profile from "./pages/profile";
 import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
@@ -30,10 +29,10 @@ const Router = () => {
           path: "connect",
           element: <Connect />,
         },
-        // {
-        //   path: "profile",
-        //   element: <Profile />,
-        // },
+        {
+          path: "profile",
+        element: <Profile />,
+         },
         {
           path: "login",
           element: <Login />,

@@ -17,7 +17,11 @@ const Landing = () => {
               <h5 className="font-semibold text-white pb-2">
                 Ready to join us?
               </h5>
-              <Button className="border-lapis border-2 lg:px-20 px-10 lg:py-2  py-1 w-max rounded-lg text-white text-[1.2rem] font-bold">
+              <Button
+                as={Link}
+                href="/signup"
+                className="border-lapis border-2 lg:px-20 px-10 lg:py-2  py-1 w-max rounded-lg text-white text-[1.2rem] font-bold"
+              >
                 SignIn
               </Button>
             </section>

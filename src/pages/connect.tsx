@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiSend, FiUser } from "react-icons/fi";
 import { IoMdGrid, IoMdList } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Developer {
   id: number;
@@ -14,6 +14,7 @@ interface Developer {
 
 const Connect: React.FC = () => {
   const [developers, setDevelopers] = useState<Developer[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDevelopers = async () => {
@@ -44,7 +45,10 @@ const Connect: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
       <div className="flex justify-between items-center mb-4">
-        <button className="mb-4 text-[#1C5D99] hover:underline">
+        <button 
+        className="mb-4 text-[#1C5D99] hover:underline"
+        onClick={() => navigate("/")}
+        >
           &larr; Back
         </button>
         <div className="flex items-center space-x-4">

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
   const [isClient, setIsClient] = useState(true);
   const [isIndividual, setIsIndividual] = useState(true);
   const [isSignup, setIsSignup] = useState(false);
@@ -31,10 +33,6 @@ const Signup: React.FC = () => {
     setIsSignup(true);
   };
 
-  const handleGoBack = () => {
-    setIsSignup(false);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -43,26 +41,54 @@ const Signup: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
+
+    try {
+      
+      const response = await fetch(`http://localhost:3000/Developers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Signup failed");
+      }
+
+      const data = await response.json();
+      const userId = data.id; 
+
+      
+      navigate(`/userprofile/${userId}`);
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 relative">
-      <div className="container mx-auto px-4" onClick={handleGoBack}>
-        <button className="mb-4 text-[#1C5D99] hover:underline">
+      <div className="mb-4 mt-3 p-2 pl-0">
+        <button
+          className="mb-4 mt-3 text-[#1C5D99] hover:underline pl-0"
+          onClick={() => navigate("/")}
+          style={{ transform: "translateX(-4cm)" }}
+        >
           &larr; Back
         </button>
       </div>
-
       {!isSignup ? (
         <div className="bg-white shadow-lg rounded-lg p-10 top-40 max-w-sm w-full border-2 border-grey">
-          <img
-            src="/path/to/logo.jpg"
-            alt="Logo"
-            className="h-16 mx-auto mb-4"
-          />
+          <span className="flex ">
+            <img
+              src="/src/images/logo2.jpg"
+              alt=""
+              className="w-max h-[6rem] rounded-full"
+            />
+          </span>
           <h1 className="text-2xl font-semibold text-center mb-6">
             Join as Client or Freelancer
           </h1>
@@ -248,15 +274,20 @@ const Signup: React.FC = () => {
               name="agreeTerms"
               checked={formData.agreeTerms}
               onChange={handleChange}
-              className="mr-2"
+              className="w-4 h-4"
             />
-            <label htmlFor="terms">I agree to the Terms and Conditions</label>
+            <label htmlFor="terms" className="text-sm">
+              I agree to the{" "}
+              <a href="#" className="text-blue-500 hover:underline">
+                terms and conditions
+              </a>
+            </label>
           </div>
           <button
             type="submit"
-            className="w-full bg-[#1C5D99] text-white py-2 rounded-lg mt-4 hover:bg-[#164973] transition-colors"
+            className="w-full bg-[#1C5D99] text-white py-2 rounded hover:bg-[#164973] transition-colors mt-4"
           >
-            Sign Up as {isClient ? "Client" : "Freelancer"}
+            Sign Up
           </button>
         </form>
       )}
