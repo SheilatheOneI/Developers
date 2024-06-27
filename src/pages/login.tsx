@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 type formValues = {
   email: string;
@@ -17,8 +18,35 @@ const Login = () => {
 
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
+  const navigate = useNavigate();
+
+  const login = async (data: formValues) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const result = await response.json();
+      localStorage.setItem("jwtToken", result.token);
+
+      console.log(result.user._id);
+
+      navigate(`/userprofile/${result.user._id}`);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const onsubmit = (data: formValues) => {
-    console.log(data);
+    login(data);
   };
 
   return (
@@ -27,7 +55,7 @@ const Login = () => {
         <section>
           <span className=" flex">
             <img
-              src="/src/images/logo2.jpg"
+              src="src/images/logo2.jpg"
               alt=""
               className="w-max h-[9rem] rounded-full "
             />

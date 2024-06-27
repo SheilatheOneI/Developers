@@ -1,31 +1,34 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiSend, FiUser } from "react-icons/fi";
 import { IoMdGrid, IoMdList } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 
 interface Developer {
-  id: number;
-  name: string;
-  role: string;
+  _id: number;
+  first_name: string;
+  specialization: string;
   bio: string;
-  roleColor: string;
+  // roleColor: string;
   rate: number;
 }
 
 const Connect: React.FC = () => {
   const [developers, setDevelopers] = useState<Developer[]>([]);
+  const [filteredDevelopers, setFilteredDevelopers] = useState<Developer[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/Developers");
+        const response = await fetch(`http://localhost:5000/api/users/`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         console.log("Fetched data:", data);
         setDevelopers(data);
+        setFilteredDevelopers(data);
       } catch (error) {
         console.error("Error fetching developers:", error);
       }
@@ -34,20 +37,22 @@ const Connect: React.FC = () => {
     fetchDevelopers();
   }, []);
 
-  const truncateBio = (bio: string, maxLength: number = 120) => {
-    if (bio.length > maxLength) {
-      return bio.substring(0, maxLength) + "...";
-    } else {
-      return bio;
-    }
-  };
+  useEffect(() => {
+    const searchTermRegex = new RegExp(searchTerm, "i"); // 'i' flag for case-insensitive matching
+    const filtered = developers.filter(
+      (developer) =>
+        searchTermRegex.test(developer.first_name) ||
+        searchTermRegex.test(developer.specialization)
+    );
+    setFilteredDevelopers(filtered);
+  }, [searchTerm, developers]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
       <div className="flex justify-between items-center mb-4">
-        <button 
-        className="mb-4 text-[#1C5D99] hover:underline"
-        onClick={() => navigate("/")}
+        <button
+          className="mb-4 text-[#1C5D99] hover:underline"
+          onClick={() => navigate("/")}
         >
           &larr; Back
         </button>
@@ -80,23 +85,22 @@ const Connect: React.FC = () => {
         </div>
 
         <div className="w-full md:w-3/4 ml-0 md:ml-8">
-          <div className="flex justify-between items-center mb-6  p-1 rounded-lg md:max-w-full gap-1">
+          <div className="flex justify-between items-center mb-6 p-1 rounded-lg md:max-w-full gap-1">
             <input
               type="text"
               placeholder="Search"
               className="w-full p-1 border-r border-gray-300 bg-white rounded-md"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button className="bg-blue-700 text-white p-1 rounded-lg mt-2 md:mt-0">
-              Search
-            </button>
           </div>
 
-          <div className="">
-            {developers &&
-              developers.map((developer) => (
+          <div>
+            {filteredDevelopers.length > 0 ? (
+              filteredDevelopers.map((developer) => (
                 <div
-                  key={developer.id}
-                  className="relative bg-white p-4 rounded-lg mb-2 md:h-96 "
+                  key={developer._id} // Ensure 'key' is set to a unique identifier (e.g., developer.id)
+                  className="relative bg-white p-4 rounded-lg mb-2 md:h-96"
                   style={{
                     height: "230px",
                   }}
@@ -106,25 +110,21 @@ const Connect: React.FC = () => {
                       <div className="flex justify-between items-center mb-2">
                         <span
                           className="text-sm font-semibold"
-                          style={{ color: developer.roleColor }}
+                          // style={{ color: developer.roleColor }}
                         >
-                          {developer.role}
+                          {developer.specialization}
                         </span>
                       </div>
                       <h2 className="text-md font-semibold mb-1 mt-4 md:mt-8">
-                        {developer.name}
+                        {developer.first_name}
                       </h2>
-                      <p className="text-sm mb-1 mt-4">
-                        {truncateBio(developer.bio)}
-                      </p>
-
-                      <div className="flex items-center mb-1 text-yellow-500 text-sm flex-wrap md:flex-nowrap ">
+                      <div className="flex items-center mb-1 text-yellow-500 text-sm flex-wrap md:flex-nowrap">
                         <strong className="mr-2">Rate:</strong>
                         <span>${developer.rate}/hour</span>
                       </div>
                       <div className="bottom-4 left-4 right-4 flex gap-2">
                         <Link
-                          to={`/userprofile/${developer.id}`}
+                          to={`/profile/${developer._id}`}
                           className="flex items-center bg-blue-500 text-white text-xs px-2 py-1 rounded-lg"
                         >
                           <FiSend className="mr-1 text-sm" />
@@ -137,7 +137,10 @@ const Connect: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <p>No results found</p>
+            )}
           </div>
         </div>
       </div>
