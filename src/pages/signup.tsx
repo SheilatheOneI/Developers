@@ -44,25 +44,30 @@ const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
+    const formatedData = {
+      ...formData,
+      user_type: "individual",
+      user_data: [
+        { first_name: formData.firstName, last_name: formData.lastName },
+      ],
+    };
 
     try {
-      
-      const response = await fetch(`http://localhost:3000/Developers`, {
+      const response = await fetch(`http://localhost:5000/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formatedData),
       });
-
-      if (!response.ok) {
-        throw new Error("Signup failed");
-      }
+      console.log(response.status);
 
       const data = await response.json();
-      const userId = data.id; 
+      if (!response.ok) {
+        throw new Error(`Signup failed ${data.message || data}`);
+      }
+      const userId = data.id;
 
-      
       navigate(`/userprofile/${userId}`);
     } catch (error) {
       console.error("Error during signup:", error);

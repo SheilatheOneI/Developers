@@ -1,16 +1,16 @@
 import { Card } from "@nextui-org/react";
-import { H5, H6, Subtitle2 } from "../components/typography.tsx";
+import { H6, Subtitle2 } from "../components/typography.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 interface Developer {
-  id: string;
-  name: string;
-  role: string;
+  // _id: string;
+  // name: string;
+  specialization: string;
   rate: number;
   bio: string;
-  phone: string;
-  email: string;
+  phone_number: string;
+  // email: string;
 }
 
 const Profile = () => {
@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchDeveloper = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/Developers/${id}`);
+        const response = await fetch(`http://localhost:5000/api/users/${id}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -38,7 +38,9 @@ const Profile = () => {
     fetchDeveloper();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (formValues) {
       setFormValues({
         ...formValues,
@@ -51,13 +53,18 @@ const Profile = () => {
     e.preventDefault();
     if (formValues) {
       try {
-        const response = await fetch(`http://localhost:3000/Developers/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formValues),
-        });
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(
+          `http://localhost:5000/api/freelancer/update`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formValues),
+          }
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -95,18 +102,18 @@ const Profile = () => {
         </span>
         {isEditing ? (
           <form onSubmit={handleEdit} className="flex flex-col gap-y-4 w-96">
-            <input
+            {/* <input
               type="text"
               name="name"
               value={formValues.name}
               onChange={handleChange}
               className="border p-2"
               placeholder="Name"
-            />
+            /> */}
             <input
               type="text"
               name="role"
-              value={formValues.role}
+              value={formValues.specialization}
               onChange={handleChange}
               className="border p-2"
               placeholder="Role"
@@ -129,20 +136,23 @@ const Profile = () => {
             <input
               type="text"
               name="phone"
-              value={formValues.phone}
+              value={formValues.phone_number}
               onChange={handleChange}
               className="border p-2"
               placeholder="Phone"
             />
-            <input
+            {/* <input
               type="email"
               name="email"
               value={formValues.email}
               onChange={handleChange}
               className="border p-2"
               placeholder="Email"
-            />
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+            /> */}
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-2 rounded"
+            >
               Save
             </button>
             <button
@@ -155,8 +165,10 @@ const Profile = () => {
           </form>
         ) : (
           <>
-            <H5 className="font-bold">{developer.name}</H5>
-            <Subtitle2 className="font-bold">{developer.role}</Subtitle2>
+            {/* <H5 className="font-bold">{developer.name}</H5> */}
+            <Subtitle2 className="font-bold">
+              {developer.specialization}
+            </Subtitle2>
             <Subtitle2 className="font-bold text-yellow-500">
               Rates: ${developer.rate}
             </Subtitle2>
@@ -165,8 +177,10 @@ const Profile = () => {
             <Card className="w-[90%]">
               <H6 className="underline italic">Contacts</H6>
               <section className="p-0 flex flex-col my-1 gap-x-2 gap-y-2">
-                <h6 className="text-start pl-2">Phone: {developer.phone}</h6>
-                <h6 className="text-start pl-2">Email: {developer.email}</h6>
+                <h6 className="text-start pl-2">
+                  Phone: {developer.phone_number}
+                </h6>
+                {/* <h6 className="text-start pl-2">Email: {developer.email}</h6> */}
               </section>
             </Card>
             <button
