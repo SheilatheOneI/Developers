@@ -50,57 +50,62 @@ const Login = () => {
   };
 
   return (
-    <main>
-      <section className="flex flex-col h-[90%] text-center  mx-auto w-max p-4 border-moonstone border-2 rounded-lg my-10  items-center justify-center">
-        <section>
-          <span className=" flex">
-            <img
-              src="src/images/logo2.jpg"
-              alt=""
-              className="w-max h-[9rem] rounded-full "
-            />
-          </span>
-          <h1 className="font-bold">Have An Account?</h1>
-          <h2 className="font-bold">Login</h2>
-        </section>
-        <form onSubmit={handleSubmit(onsubmit)} className="pt-4">
-          <section className="grid grid-col gap-y-2">
-            <input
-              type="text"
-              id="email"
-              className="p-4 border-gray-400 border-2 rounded-xl"
-              placeholder="Email"
-              {...register("email", { required: "This field is required" })}
-            />
-            <p className="text-red-300 text-start text-sm">
-              {errors.email?.message}
-            </p>
-
-            <input
-              type="password"
-              id="password"
-              className="p-4 border-gray-400 border-2 w-[20rem] rounded-xl "
-              placeholder="Password"
-              {...register("password", {
-                required: "This field is required",
-              })}
-            />
-            <p className="text-red-300 text-start text-sm ">
-              {errors.password?.message}
-            </p>
-
-            <Button
-              type="submit"
-              className=" bg-lapis text-white  p-3  rounded-lg w-[20rem]"
-            >
-              Login
+    <div className="flex flex-col min-h-screen items-center bg-gray-100 overflow-hidden">
+      <header className="flex justify-between w-full px-8 py-4">
+        <img src="src/images/logo2.jpg" alt="DevConnect Logo" className="w-40 h-20" />
+      </header>
+      <main className="flex flex-col items-center justify-center flex-grow">
+        <div className="w-full max-w-lg p-8 bg-white border-2 rounded-2xl shadow-md">
+          <h1 className="mb-2 text-2xl font-bold text-center">DevConnect</h1>
+          <p className="mb-4 text-center">Login to continue</p>
+          <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
+            <div className="flex flex-col">
+              <input
+                type="text"
+                id="email"
+                className="p-4 border-2 rounded-xl"
+                placeholder="Email"
+                {...register("email", { required: "This field is required" })}
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <input
+                type="password"
+                id="password"
+                className="p-4 border-2 rounded-xl"
+                placeholder="Password"
+                {...register("password", {
+                  required: "This field is required",
+                })}
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
+            <div className="flex justify-end">
+              <a href="#" className="text-sm text-blue-500">
+                Forget Password? Click here
+              </a>
+            </div>
+            <Button type="submit" className="w-full py-3 text-white bg-blue-600 rounded-xl">
+              Log In
             </Button>
-          </section>
-
+          </form>
+          <div className="mt-6 text-center">
+            <p>
+              Don't have an account?{" "}
+              <a href="#" className="text-blue-500">
+                Sign up
+              </a>
+            </p>
+          </div>
           <DevTool control={control} />
-        </form>
-      </section>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 };
 

@@ -4,13 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 interface Developer {
-  // _id: string;
-  // name: string;
   specialization: string;
   rate: number;
   bio: string;
   phone_number: string;
-  // email: string;
 }
 
 const Profile = () => {
@@ -100,23 +97,16 @@ const Profile = () => {
             className="w-max h-[6rem] rounded-full"
           />
         </span>
+        
         {isEditing ? (
           <form onSubmit={handleEdit} className="flex flex-col gap-y-4 w-96">
-            {/* <input
-              type="text"
-              name="name"
-              value={formValues.name}
-              onChange={handleChange}
-              className="border p-2"
-              placeholder="Name"
-            /> */}
             <input
               type="text"
-              name="role"
+              name="specialization"
               value={formValues.specialization}
               onChange={handleChange}
               className="border p-2"
-              placeholder="Role"
+              placeholder="Specialization"
             />
             <input
               type="number"
@@ -135,20 +125,12 @@ const Profile = () => {
             />
             <input
               type="text"
-              name="phone"
+              name="phone_number"
               value={formValues.phone_number}
               onChange={handleChange}
               className="border p-2"
-              placeholder="Phone"
+              placeholder="Phone Number"
             />
-            {/* <input
-              type="email"
-              name="email"
-              value={formValues.email}
-              onChange={handleChange}
-              className="border p-2"
-              placeholder="Email"
-            /> */}
             <button
               type="submit"
               className="bg-blue-500 text-white p-2 rounded"
@@ -165,7 +147,6 @@ const Profile = () => {
           </form>
         ) : (
           <>
-            {/* <H5 className="font-bold">{developer.name}</H5> */}
             <Subtitle2 className="font-bold">
               {developer.specialization}
             </Subtitle2>
@@ -180,7 +161,6 @@ const Profile = () => {
                 <h6 className="text-start pl-2">
                   Phone: {developer.phone_number}
                 </h6>
-                {/* <h6 className="text-start pl-2">Email: {developer.email}</h6> */}
               </section>
             </Card>
             <button

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
-  const [isClient, setIsClient] = useState(true);
+  // const [isClient, setIsClient] = useState(true);
   const [isIndividual, setIsIndividual] = useState(true);
-  const [isSignup, setIsSignup] = useState(false);
+  // const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,11 +17,11 @@ const Signup: React.FC = () => {
     agreeTerms: false,
   });
 
-  const handleClientFreelancerChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setIsClient(e.target.value === "client");
-  };
+  // const handleClientFreelancerChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   setIsClient(e.target.value === "client");
+  // };
 
   const handleIndividualBusinessChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -29,9 +29,9 @@ const Signup: React.FC = () => {
     setIsIndividual(e.target.value === "individual");
   };
 
-  const handleContinue = () => {
-    setIsSignup(true);
-  };
+  // const handleContinue = () => {
+  //   setIsSignup(true);
+  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -85,7 +85,7 @@ const Signup: React.FC = () => {
           &larr; Back
         </button>
       </div>
-      {!isSignup ? (
+      {/* {!isSignup ? (
         <div className="bg-white shadow-lg rounded-lg p-10 top-40 max-w-sm w-full border-2 border-grey">
           <span className="flex ">
             <img
@@ -134,7 +134,7 @@ const Signup: React.FC = () => {
             </a>
           </p>
         </div>
-      ) : (
+      ) : ( */}
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-20 border-2 border-grey"
@@ -295,7 +295,7 @@ const Signup: React.FC = () => {
             Sign Up
           </button>
         </form>
-      )}
+      {/* )} */}
     </div>
   );
 };
