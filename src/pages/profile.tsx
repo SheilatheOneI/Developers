@@ -6,9 +6,9 @@ import { H5, H6, Subtitle2 } from "../components/typography.tsx";
 interface Developer {
   id: number;
   first_name: string;
-  role: string;
+  specialization: string;
   bio: string;
-  roleColor: string;
+  // roleColor: string;
   rate: number;
   phone_number: string;
   email: string;
@@ -48,8 +48,8 @@ const UserProfile: React.FC = () => {
             className="w-[6rem] h-[6rem] rounded-full"
           />
         </span>
-        <H5 className="font-bold">{developer. first_name}</H5>
-        <Subtitle2 className="font-bold">{developer.role}</Subtitle2>
+        <H5 className="font-bold">{developer.first_name}</H5>
+        <Subtitle2 className="font-bold">{developer.specialization}</Subtitle2>
         <Subtitle2 className="font-bold text-yellow-500">
           Rates: ${developer.rate}/hour
         </Subtitle2>
@@ -63,7 +63,7 @@ const UserProfile: React.FC = () => {
             <h6 className="text-start pl-2">Email:</h6>
             <h6 className="text-start pl-2">{developer.email}</h6>
           </section>
-          <section className="p-0 grid grid-cols-1 sm:grid-cols-2 my-1 gap-x-2">
+          <section className="p-0 grid grid-cols-1 sm:grid-cols-2 my-1 gap-x-1 items-center justify-center">
             <Button className="bg-green-600 font-semibold rounded-sm text-white">
               Call
             </Button>

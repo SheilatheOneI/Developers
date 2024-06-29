@@ -23,7 +23,7 @@ const Landing = () => {
       }
       const data = await response.json();
 
-      const searchTermRegex = new RegExp(searchQuery, "i"); // 'i' flag for case-insensitive matching
+      const searchTermRegex = new RegExp(searchQuery, "i"); 
       const filteredResults = data.filter(
         (developer: Developer) =>
           searchTermRegex.test(developer.first_name) ||
