@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { Button } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
 type formValues = {
@@ -52,7 +52,11 @@ const Login = () => {
   return (
     <div className="flex flex-col min-h-screen items-center bg-gray-100 overflow-hidden">
       <header className="flex justify-between w-full px-8 py-4">
-        <img src="src/images/logo2.jpg" alt="DevConnect Logo" className="w-40 h-20" />
+        <img
+          src="src/images/logo2.jpg"
+          alt="DevConnect Logo"
+          className="w-40 h-20"
+        />
       </header>
       <main className="flex flex-col items-center justify-center flex-grow">
         <div className="w-full max-w-lg p-8 bg-white border-2 rounded-2xl shadow-md">
@@ -68,7 +72,9 @@ const Login = () => {
                 {...register("email", { required: "This field is required" })}
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
               )}
             </div>
             <div className="flex flex-col">
@@ -82,7 +88,9 @@ const Login = () => {
                 })}
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
             <div className="flex justify-end">
@@ -90,17 +98,18 @@ const Login = () => {
                 Forget Password? Click here
               </a>
             </div>
-            <Button type="submit" className="w-full py-3 text-white bg-blue-600 rounded-xl">
+            <Button
+              type="submit"
+              className="w-full py-3 text-white bg-blue-600 rounded-xl"
+            >
               Log In
             </Button>
           </form>
           <div className="mt-6 text-center">
-            <p>
-              Don't have an account?{" "}
-              <a href="#" className="text-blue-500">
-                Sign up
-              </a>
-            </p>
+            <p> Don't have an account?</p>
+            <Link href="/signup">
+              <p className="text-blue-500">Sign up</p>
+            </Link>
           </div>
           <DevTool control={control} />
         </div>

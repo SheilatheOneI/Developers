@@ -6,9 +6,9 @@ import { H5, H6, Subtitle2 } from "../components/typography.tsx";
 interface Developer {
   id: number;
   first_name: string;
-  role: string;
+  specialization: string;
   bio: string;
-  roleColor: string;
+  // roleColor: string;
   rate: number;
   phone_number: string;
   email: string;
@@ -24,6 +24,8 @@ const UserProfile: React.FC = () => {
       try {
         const response = await fetch(`http://localhost:5000/api/users/${id}`);
         const data = await response.json();
+        console.log(data);
+
         setDeveloper(data);
         setLoading(false);
       } catch (error) {
@@ -48,8 +50,8 @@ const UserProfile: React.FC = () => {
             className="w-[6rem] h-[6rem] rounded-full"
           />
         </span>
-        <H5 className="font-bold">{developer. first_name}</H5>
-        <Subtitle2 className="font-bold">{developer.role}</Subtitle2>
+        <H5 className="font-bold">{developer.first_name}</H5>
+        <Subtitle2 className="font-bold">{developer.specialization}</Subtitle2>
         <Subtitle2 className="font-bold text-yellow-500">
           Rates: ${developer.rate}/hour
         </Subtitle2>

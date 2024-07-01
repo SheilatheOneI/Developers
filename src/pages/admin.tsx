@@ -22,7 +22,7 @@ const Admin = () => {
 
   const adminlogin = async (data: formValues) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+      const response = await fetch(`http://localhost:5000/api/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,9 +34,9 @@ const Admin = () => {
         throw new Error("Login failed");
       }
 
-      const result = await response.json();
+      // const result = await response.json();
 
-      console.log(result.user._id);
+      // console.log(result.user._id);
 
       navigate(`/connect`);
     } catch (error) {
@@ -58,6 +58,7 @@ const Admin = () => {
               className="w-max h-[9rem] rounded-full "
             />
           </span>
+
           <h1 className="font-bold">Admin Login</h1>
           {/* <h2 className="font-bold">Login</h2> */}
         </section>

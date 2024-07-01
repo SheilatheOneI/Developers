@@ -8,6 +8,7 @@ interface Developer {
   rate: number;
   bio: string;
   phone_number: string;
+  first_name: string;
 }
 
 const Profile = () => {
@@ -97,7 +98,8 @@ const Profile = () => {
             className="w-max h-[6rem] rounded-full"
           />
         </span>
-        
+        <Subtitle2 className="font-bold">{developer.first_name}</Subtitle2>
+
         {isEditing ? (
           <form onSubmit={handleEdit} className="flex flex-col gap-y-4 w-96">
             <input
