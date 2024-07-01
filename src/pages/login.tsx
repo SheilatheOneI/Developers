@@ -52,7 +52,11 @@ const Login = () => {
   return (
     <div className="flex flex-col h-full items-center bg-white overflow-hidden">
       <header className="flex justify-between w-full px-8 py-2">
-        <img src="src/images/logo2.jpg" alt="DevConnect Logo" className="w-40 h-20" />
+        <img
+          src="src/images/logo2.jpg"
+          alt="DevConnect Logo"
+          className="w-40 h-20"
+        />
       </header>
       <main className="flex flex-col items-center justify-center flex-grow min-w-96 pt-9">
         <div className="w-full max-w-2xl p-8 bg-white border-2 rounded-2xl shadow-md">
@@ -68,7 +72,9 @@ const Login = () => {
                 {...register("email", { required: "This field is required" })}
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
               )}
             </div>
             <div className="flex flex-col">
@@ -82,15 +88,23 @@ const Login = () => {
                 })}
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
             <div className="flex justify-center">
               <a href="#" className="text-sm text-[#1C5D99]">
-              Forget Password? <span className="text-[#BBCDE5] hover:underline ">Click here</span>
+                Forget Password?{" "}
+                <span className="text-[#BBCDE5] hover:underline ">
+                  Click here
+                </span>
               </a>
             </div>
-            <Button type="submit" className="w-full py-2 text-white bg-[#1C5D99] rounded-xl">
+            <Button
+              type="submit"
+              className="w-full py-2 text-white bg-[#1C5D99] rounded-xl"
+            >
               Log In
             </Button>
           </form>

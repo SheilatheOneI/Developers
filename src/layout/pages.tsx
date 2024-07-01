@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import NavbarLayout from "./navbar";
 const PageLayout = () => {
   return (
-    <section>
+    <section className="h-max">
       <div>
         <NavbarLayout />
       </div>

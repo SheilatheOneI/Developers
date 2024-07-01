@@ -22,7 +22,7 @@ const Admin = () => {
 
   const adminlogin = async (data: formValues) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+      const response = await fetch(`http://localhost:5000/api/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,9 +34,9 @@ const Admin = () => {
         throw new Error("Login failed");
       }
 
-      const result = await response.json();
+      // const result = await response.json();
 
-      console.log(result.user._id);
+      // console.log(result.user._id);
 
       navigate(`/connect`);
     } catch (error) {
@@ -48,20 +48,22 @@ const Admin = () => {
   };
 
   return (
-    <main className="h-full flex items-center pt-[4cm] justify-center">
-      <section className="flex flex-col text-center mx-auto w-max p-4 border-moonstone border-2 rounded-lg items-center justify-center">
+    <main>
+      <section className="flex flex-col h-[90%] text-center  mx-auto w-max p-4 border-moonstone border-2 rounded-lg my-10  items-center justify-center">
         <section>
-          {/* <span className="flex justify-center mb-4">
+          <span className=" flex">
             <img
               src="/src/images/logo2.jpg"
               alt=""
-              className="w-max h-[9rem] rounded-full"
+              className="w-max h-[9rem] rounded-full "
             />
-          </span> */}
+          </span>
+
           <h1 className="font-bold">Admin Login</h1>
+          {/* <h2 className="font-bold">Login</h2> */}
         </section>
         <form onSubmit={handleSubmit(onsubmit)} className="pt-4">
-          <section className="grid grid-cols-1 gap-y-2">
+          <section className="grid grid-col gap-y-2">
             <input
               type="text"
               id="email"
@@ -76,19 +78,19 @@ const Admin = () => {
             <input
               type="password"
               id="password"
-              className="p-4 border-gray-400 border-2 w-[20rem] rounded-xl"
+              className="p-4 border-gray-400 border-2 w-[20rem] rounded-xl "
               placeholder="Password"
               {...register("password", {
                 required: "This field is required",
               })}
             />
-            <p className="text-red-300 text-start text-sm">
+            <p className="text-red-300 text-start text-sm ">
               {errors.password?.message}
             </p>
 
             <Button
               type="submit"
-              className="bg-lapis text-white p-3 rounded-lg w-[20rem]"
+              className=" bg-lapis text-white  p-3  rounded-lg w-[20rem]"
             >
               Login
             </Button>
