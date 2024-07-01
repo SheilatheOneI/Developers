@@ -50,16 +50,16 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center bg-gray-100 overflow-hidden">
-      <header className="flex justify-between w-full px-8 py-4">
+    <div className="flex flex-col h-full items-center bg-white overflow-hidden">
+      <header className="flex justify-between w-full px-8 py-2">
         <img
           src="src/images/logo2.jpg"
           alt="DevConnect Logo"
           className="w-40 h-20"
         />
       </header>
-      <main className="flex flex-col items-center justify-center flex-grow">
-        <div className="w-full max-w-lg p-8 bg-white border-2 rounded-2xl shadow-md">
+      <main className="flex flex-col items-center justify-center flex-grow min-w-96 pt-9">
+        <div className="w-full max-w-2xl p-8 bg-white border-2 rounded-2xl shadow-md">
           <h1 className="mb-2 text-2xl font-bold text-center">DevConnect</h1>
           <p className="mb-4 text-center">Login to continue</p>
           <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
@@ -67,7 +67,7 @@ const Login = () => {
               <input
                 type="text"
                 id="email"
-                className="p-4 border-2 rounded-xl"
+                className="p-2 border-2 rounded-xl"
                 placeholder="Email"
                 {...register("email", { required: "This field is required" })}
               />
@@ -81,7 +81,7 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                className="p-4 border-2 rounded-xl"
+                className="p-2 border-2 rounded-xl"
                 placeholder="Password"
                 {...register("password", {
                   required: "This field is required",
@@ -93,22 +93,25 @@ const Login = () => {
                 </p>
               )}
             </div>
-            <div className="flex justify-end">
-              <a href="#" className="text-sm text-blue-500">
-                Forget Password? Click here
+            <div className="flex justify-center">
+              <a href="#" className="text-sm text-[#1C5D99]">
+                Forget Password?{" "}
+                <span className="text-[#BBCDE5] hover:underline ">
+                  Click here
+                </span>
               </a>
             </div>
             <Button
               type="submit"
-              className="w-full py-3 text-white bg-blue-600 rounded-xl"
+              className="w-full py-2 text-white bg-[#1C5D99] rounded-xl"
             >
               Log In
             </Button>
           </form>
-          <div className="mt-6 text-center">
+          <div className="mt-4 text-center mb-1 ">
             <p> Don't have an account?</p>
             <Link href="/signup">
-              <p className="text-blue-500">Sign up</p>
+              <p className="text-[#BBCDE5]  hover:underline">Sign up</p>
             </Link>
           </div>
           <DevTool control={control} />

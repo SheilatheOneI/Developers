@@ -6,9 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 interface Developer {
   _id: number;
   first_name: string;
+  last_name: string;
   specialization: string;
   bio: string;
-  // roleColor: string;
   rate: number;
 }
 
@@ -38,7 +38,7 @@ const Connect: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const searchTermRegex = new RegExp(searchTerm, "i"); // 'i' flag for case-insensitive matching
+    const searchTermRegex = new RegExp(searchTerm, "i");
     const filtered = developers.filter(
       (developer) =>
         searchTermRegex.test(developer.first_name) ||
@@ -99,7 +99,7 @@ const Connect: React.FC = () => {
             {filteredDevelopers.length > 0 ? (
               filteredDevelopers.map((developer) => (
                 <div
-                  key={developer._id} // Ensure 'key' is set to a unique identifier (e.g., developer.id)
+                  key={developer._id}
                   className="relative bg-white p-4 rounded-lg mb-2 md:h-96"
                   style={{
                     height: "230px",
@@ -108,20 +108,18 @@ const Connect: React.FC = () => {
                   <div className="flex flex-col md:flex-row items-start">
                     <div className="flex-1">
                       <div className="flex justify-between items-center mb-2">
-                        <span
-                          className="text-sm font-semibold"
-                          // style={{ color: developer.roleColor }}
-                        >
+                        <span className="text-sm font-semibold">
                           {developer.specialization}
                         </span>
                       </div>
                       <h2 className="text-md font-semibold mb-1 mt-4 md:mt-8">
-                        {developer.first_name}
+                        {developer.first_name} {developer.last_name}
                       </h2>
                       <div className="flex items-center mb-1 text-yellow-500 text-sm flex-wrap md:flex-nowrap">
                         <strong className="mr-2">Rate:</strong>
                         <span>${developer.rate}/hour</span>
                       </div>
+                      <p className="text-sm mb-2">{developer.bio}</p>
                       <div className="bottom-4 left-4 right-4 flex gap-2">
                         <Link
                           to={`/profile/${developer._id}`}

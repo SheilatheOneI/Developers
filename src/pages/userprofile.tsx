@@ -9,6 +9,7 @@ interface Developer {
   bio: string;
   phone_number: string;
   first_name: string;
+  first_name: string;
 }
 
 const Profile = () => {
@@ -81,16 +82,15 @@ const Profile = () => {
 
   return (
     <section className="mx-auto w-max pl-0 md:pt-2">
-      <div className="mb-4 mt-3 p-2 pl-0">
+      <div className="mb-4 mt-3 p-2 pl-0 flex items-center">
         <button
-          className="mb-4 mt-3 text-[#1C5D99] hover:underline pl-0"
+          className="text-[#1C5D99] hover:underline pl-0"
           onClick={() => navigate("/")}
-          style={{ transform: "translateX(-4cm)" }}
         >
           &larr; Back
         </button>
       </div>
-      <section className="flex flex-col h-max text-center gap-y-1 md:mx-auto  p-4 border-moonstone border-2 rounded-lg my-6 items-center justify-center">
+      <section className="flex flex-col h-max text-center gap-y-1 md:mx-auto p-4 border-moonstone border-2 rounded-lg my-6 items-center justify-center">
         <span className="flex">
           <img
             src="/src/images/logo2.jpg"
@@ -167,7 +167,7 @@ const Profile = () => {
             </Card>
             <button
               onClick={() => setIsEditing(true)}
-              className="bg-blue-500 text-white p-2 rounded mt-4"
+              className="bg-blue-500 text-white p-1 rounded mt-3 w-36"
             >
               Edit
             </button>

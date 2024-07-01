@@ -65,7 +65,7 @@ const UserProfile: React.FC = () => {
             <h6 className="text-start pl-2">Email:</h6>
             <h6 className="text-start pl-2">{developer.email}</h6>
           </section>
-          <section className="p-0 grid grid-cols-1 sm:grid-cols-2 my-1 gap-x-2">
+          <section className="p-0 grid grid-cols-1 sm:grid-cols-2 my-1 gap-x-1 items-center justify-center">
             <Button className="bg-green-600 font-semibold rounded-sm text-white">
               Call
             </Button>
