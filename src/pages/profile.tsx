@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button, Card } from "@nextui-org/react";
 import { H5, H6, Subtitle2 } from "../components/typography.tsx";
 
@@ -66,7 +66,11 @@ const UserProfile: React.FC = () => {
             <h6 className="text-start pl-2">{developer.email}</h6>
           </section>
           <section className="p-0 grid grid-cols-1 sm:grid-cols-2 my-1 gap-x-1 items-center justify-center">
-            <Button className="bg-green-600 font-semibold rounded-sm text-white">
+            <Button
+              as={Link}
+              to={`tel:${developer.phone_number}`}
+              className="bg-green-600 font-semibold rounded-sm text-white"
+            >
               Call
             </Button>
           </section>

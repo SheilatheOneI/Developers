@@ -1,5 +1,5 @@
 import { Card } from "@nextui-org/react";
-import { H6, Subtitle2 } from "../components/typography.tsx";
+import { H5, H6, Subtitle, Subtitle2 } from "../components/typography.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,7 @@ interface Developer {
   bio: string;
   phone_number: string;
   first_name: string;
-  first_name: string;
+  // first_name: string;
 }
 
 const Profile = () => {
@@ -90,7 +90,7 @@ const Profile = () => {
           &larr; Back
         </button>
       </div>
-      <section className="flex flex-col h-max text-center gap-y-1 md:mx-auto p-4 border-moonstone border-2 rounded-lg my-6 items-center justify-center">
+      <section className="flex flex-col h-max w-max   xs:px-3  sm:px-10 lg:px-20  py-4 text-center gap-y-1 md:mx-auto  border-moonstone border-2 rounded-lg my-8 items-center justify-center">
         <span className="flex">
           <img
             src="/src/images/logo2.jpg"
@@ -98,7 +98,7 @@ const Profile = () => {
             className="w-max h-[6rem] rounded-full"
           />
         </span>
-        <Subtitle2 className="font-bold">{developer.first_name}</Subtitle2>
+        <Subtitle className="font-bold">{developer.first_name}</Subtitle>
 
         {isEditing ? (
           <form onSubmit={handleEdit} className="flex flex-col gap-y-4 w-96">
@@ -149,20 +149,18 @@ const Profile = () => {
           </form>
         ) : (
           <>
-            <Subtitle2 className="font-bold">
-              {developer.specialization}
-            </Subtitle2>
+            <H6 className="font-bold">{developer.specialization}</H6>
             <Subtitle2 className="font-bold text-yellow-500">
               Rates: ${developer.rate}
             </Subtitle2>
-            <H6 className="underline italic">Bio</H6>
-            <p className="text-wrap max-w-2xl">{developer.bio}</p>
+            <H5 className="underline italic">Bio</H5>
+            <p className="text-wrap max-w-2xl text-base">{developer.bio}</p>
             <Card className="w-[90%]">
-              <H6 className="underline italic">Contacts</H6>
+              <H5 className="underline italic">Contacts</H5>
               <section className="p-0 flex flex-col my-1 gap-x-2 gap-y-2">
-                <h6 className="text-start pl-2">
+                <h5 className="text-start pl-2">
                   Phone: {developer.phone_number}
-                </h6>
+                </h5>
               </section>
             </Card>
             <button
