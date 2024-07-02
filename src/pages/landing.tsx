@@ -23,7 +23,7 @@ const Landing = () => {
       }
       const data = await response.json();
 
-      const searchTermRegex = new RegExp(searchQuery, "i"); 
+      const searchTermRegex = new RegExp(searchQuery, "i");
       const filteredResults = data.filter(
         (developer: Developer) =>
           searchTermRegex.test(developer.first_name) ||
@@ -50,10 +50,10 @@ const Landing = () => {
   }, [query]);
 
   return (
-    <section className="bg-landing min-h-screen bg-[#0b0a0a9c] h-screen-max bg-blend-overlay bg-center bg-cover bg-no-repeat flex items-center justify-center">
+    <section className="bg-landing bg-[#0b0a0a9c] h-[100vh] bg-blend-overlay bg-center bg-cover bg-no-repeat flex items-center justify-center">
       <section className="">
         <section className="justify-center  items-center flex flex-col">
-          <H2 className="!text-6xl !xl:text-7xl pb-10 italic text-white">
+          <H2 className="!text-6xl pb-10 italic text-white">
             Connect,Collaborate,Create
           </H2>
           <section className="grid grid-cols-[3fr,1fr] gap-2 mx-2">
@@ -61,7 +61,7 @@ const Landing = () => {
               <input
                 type="text"
                 placeholder="Looking for a freelancer?..."
-                className="w-full border-lapis border-2 rounded-full font-bold py-2 pl-4 pr-[15rem]"
+                className="w-full border-lapis border-2 rounded-full font-bold py-2 pl-1 sm:pl-4"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />

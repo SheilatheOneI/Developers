@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiSend, FiUser } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 import { IoMdGrid, IoMdList } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -128,9 +128,6 @@ const Connect: React.FC = () => {
                           <FiSend className="mr-1 text-sm" />
                           Read More
                         </Link>
-                        <button className="flex items-center bg-green-500 text-white text-xs px-2 py-1 rounded-lg">
-                          <FiUser className="mr-1 text-sm" /> Contact
-                        </button>
                       </div>
                     </div>
                   </div>
