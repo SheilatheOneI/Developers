@@ -1,13 +1,19 @@
 import { Link, Button } from "@nextui-org/react";
-const NavbarLayout = () => {
+
+interface NavbarLayoutProps {
+  currentPage: string;
+}
+
+const NavbarLayout = ({ currentPage }: NavbarLayoutProps) => {
   return (
-    <nav className=" bg-lapis  p-4">
-      <section className=" flex justify-between text-white mx-12 ">
+    <nav className="bg-lapis p-4">
+      <section className="flex justify-between text-white mx-12">
         <div className="">
-          <Link href="/" className="font-bold">
-            {" "}
-            Home
-          </Link>
+          {currentPage !== "/" && (
+            <Link href="/" className="font-bold">
+              Home
+            </Link>
+          )}
         </div>
         <div>
           <Button as={Link} href="admin" className="font-bold">
@@ -18,4 +24,5 @@ const NavbarLayout = () => {
     </nav>
   );
 };
+
 export default NavbarLayout;

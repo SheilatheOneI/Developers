@@ -95,7 +95,7 @@ const Connect: React.FC = () => {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col-reverse">
             {filteredDevelopers.length > 0 ? (
               filteredDevelopers.map((developer) => (
                 <div

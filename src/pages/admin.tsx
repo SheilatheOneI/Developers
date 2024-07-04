@@ -3,15 +3,15 @@ import { DevTool } from "@hookform/devtools";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
-type formValues = {
-  email: string;
+type FormValues = {
+  username: string;
   password: string;
 };
 
 const Admin = () => {
-  const form = useForm<formValues>({
+  const form = useForm<FormValues>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -20,7 +20,7 @@ const Admin = () => {
   const { errors } = formState;
   const navigate = useNavigate();
 
-  const adminlogin = async (data: formValues) => {
+  const adminLogin = async (data: FormValues) => {
     try {
       const response = await fetch(`http://localhost:5000/api/admin/login`, {
         method: "POST",
@@ -29,73 +29,66 @@ const Admin = () => {
         },
         body: JSON.stringify(data),
       });
+      console.log(data)
 
       if (!response.ok) {
         throw new Error("Login failed");
       }
-
-      // const result = await response.json();
-
-      // console.log(result.user._id);
 
       navigate(`/connect`);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  const onsubmit = (data: formValues) => {
-    adminlogin(data);
+
+  const onSubmit = (data: FormValues) => {
+    adminLogin(data);
   };
 
   return (
     <main>
-      <section className="flex flex-col h-[90%] text-center  mx-auto w-max p-4 border-moonstone border-2 rounded-lg my-10  items-center justify-center">
-        <section>
-          <span className=" flex">
-            <img
-              src="/src/images/logo2.jpg"
-              alt=""
-              className="w-max h-[9rem] rounded-full "
-            />
-          </span>
-
-          <h1 className="font-bold">Admin Login</h1>
-          {/* <h2 className="font-bold">Login</h2> */}
+      <section className="flex flex-col h-[90%] mt-20 justify-center items-center mx-auto p-10 border-moonstone border-2 rounded-lg w-max md:w-[36%]">
+        <section className="text-center mb-10">
+          <img
+            src="/src/images/logo2.jpg"
+            alt="Logo"
+            className="w-36 h-36 rounded-full mx-auto mb-4"
+          />
+          <h1 className="font-bold text-2xl">Admin Login</h1>
         </section>
-        <form onSubmit={handleSubmit(onsubmit)} className="pt-4">
-          <section className="grid grid-col gap-y-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-xs">
+          <div className="mb-4">
             <input
               type="text"
-              id="email"
-              className="p-4 border-gray-400 border-2 rounded-xl"
-              placeholder="Email"
-              {...register("email", { required: "This field is required" })}
+              id="username"
+              className="w-full p-3 border border-gray-400 rounded-xl"
+              placeholder="Username"
+              {...register("username", { required: "Username is required" })}
             />
-            <p className="text-red-300 text-start text-sm">
-              {errors.email?.message}
+            <p className="text-red-500 text-sm mt-1">
+              {errors.username?.message}
             </p>
-
+          </div>
+          <div className="mb-6">
             <input
               type="password"
               id="password"
-              className="p-4 border-gray-400 border-2 w-[20rem] rounded-xl "
+              className="w-full p-3 border border-gray-400 rounded-xl"
               placeholder="Password"
               {...register("password", {
-                required: "This field is required",
+                required: "Password is required",
               })}
             />
-            <p className="text-red-300 text-start text-sm ">
+            <p className="text-red-500 text-sm mt-1">
               {errors.password?.message}
             </p>
-
-            <Button
-              type="submit"
-              className=" bg-lapis text-white  p-3  rounded-lg w-[20rem]"
-            >
-              Login
-            </Button>
-          </section>
-
+          </div>
+          <Button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-3 rounded-lg"
+          >
+            Login
+          </Button>
           <DevTool control={control} />
         </form>
       </section>

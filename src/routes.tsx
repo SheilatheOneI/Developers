@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useRoutes} from "react-router-dom";
 import Signup from "./pages/signup";
 import Connect from "./pages/connect";
 import Profile from "./pages/userprofile";
@@ -7,6 +7,8 @@ import UserProfile from "./pages/profile";
 import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
+import ForgotPassword from "./pages/ForgotPassword";
+
 const Router = () => {
   const routes = useRoutes([
     {
@@ -26,6 +28,11 @@ const Router = () => {
           element: <Signup />,
         },
         {
+          path: "/forgot-password",
+          element: <ForgotPassword />,
+        },
+
+        {
           path: "connect",
           element: <Connect />,
         },
@@ -41,6 +48,8 @@ const Router = () => {
       ],
     },
   ]);
+
   return routes;
 };
+
 export default Router;

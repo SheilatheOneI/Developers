@@ -69,7 +69,7 @@ const Signup: React.FC = () => {
         <img
           src="src/images/logo2.jpg"
           alt="Logo"
-          className="h-16 mx-auto mb-4"
+          className="h-16 w-16 mx-auto mb-4 rounded-full"
         />
         <h1 className="text-2xl font-semibold text-center mb-6">
           Sign up to get started

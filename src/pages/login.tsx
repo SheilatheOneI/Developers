@@ -45,24 +45,28 @@ const Login = () => {
     }
   };
 
-  const onsubmit = (data: formValues) => {
+  const onSubmit = (data: formValues) => {
     login(data);
   };
 
+  const handleForgotPassword = () => {
+    navigate("/forgot-password"); // Navigate to the forgot password page
+  };
+
   return (
-    <div className="flex flex-col h-full items-center bg-white overflow-hidden">
-      <header className="flex justify-between w-full px-8 py-2">
-        <img
-          src="src/images/logo2.jpg"
-          alt="DevConnect Logo"
-          className="w-40 h-20"
-        />
-      </header>
-      <main className="flex flex-col items-center justify-center flex-grow min-w-96 pt-9">
-        <div className="w-full max-w-2xl p-8 bg-white border-2 rounded-2xl shadow-md">
+    <div className="flex flex-col h-screen items-center bg-white overflow-hidden">
+      <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
+        <div className="w-full max-w-md p-8 bg-white border-2 rounded-2xl shadow-md">
+          <div className="flex justify-center mb-4">
+            <img
+              src="src/images/logo2.jpg"
+              alt="DevConnect Logo"
+              className="w-20 h-20 rounded-full"
+            />
+          </div>
           <h1 className="mb-2 text-2xl font-bold text-center">DevConnect</h1>
           <p className="mb-4 text-center">Login to continue</p>
-          <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
               <input
                 type="text"
@@ -94,11 +98,13 @@ const Login = () => {
               )}
             </div>
             <div className="flex justify-center">
-              <a href="#" className="text-sm text-[#1C5D99]">
+              <a
+                href="#"
+                className="text-sm text-[#1C5D99] cursor-pointer"
+                onClick={handleForgotPassword}
+              >
                 Forget Password?{" "}
-                <span className="text-[#BBCDE5] hover:underline ">
-                  Click here
-                </span>
+                <span className="text-[#BBCDE5] hover:underline">Click here</span>
               </a>
             </div>
             <Button
@@ -111,7 +117,7 @@ const Login = () => {
           <div className="mt-4 text-center mb-1 ">
             <p> Don't have an account?</p>
             <Link href="/signup">
-              <p className="text-[#BBCDE5]  hover:underline">Sign up</p>
+              <p className="text-[#BBCDE5] hover:underline">Sign up</p>
             </Link>
           </div>
           <DevTool control={control} />
