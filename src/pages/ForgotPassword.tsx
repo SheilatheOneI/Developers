@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null); // State for input validation error
+  const [error, setError] = useState<string | null>(null); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

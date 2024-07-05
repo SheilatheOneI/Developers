@@ -1,26 +1,22 @@
 import { Link, Button } from "@nextui-org/react";
+import { FaUser } from "react-icons/fa";
 
-interface NavbarLayoutProps {
-  currentPage: string;
-}
-
-const NavbarLayout = ({ currentPage }: NavbarLayoutProps) => {
+const NavbarLayout = () => {
   return (
-    <nav className="bg-lapis p-4">
-      <section className="flex justify-between text-white mx-12">
-        <div className="">
-          {currentPage !== "/" && (
-            <Link href="/" className="font-bold">
-              Home
-            </Link>
-          )}
-        </div>
-        <div>
-          <Button as={Link} href="admin" className="font-bold">
-            Admin Login
+    <nav className="bg-white shadow-lg">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <Link href="/" className="font-bold text-xl text-blue-500">
+          DevConnect
+        </Link>
+        <div className="flex items-center space-x-4">
+          <Button as={Link} href="/login" className="bg-blue-500 text-white font-bold rounded-full">
+            Start as a freelancer
           </Button>
+          <Link href="/admin" className="text-gray-600">
+            <FaUser className="h-6 w-6" />
+          </Link>
         </div>
-      </section>
+      </div>
     </nav>
   );
 };
