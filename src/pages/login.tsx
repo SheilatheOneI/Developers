@@ -35,7 +35,7 @@ const Login = () => {
       }
 
       const result = await response.json();
-      localStorage.setItem("jwtToken", result.token);
+      // localStorage.setItem("jwtToken", result.token);
 
       console.log(result.user._id);
 
@@ -104,7 +104,9 @@ const Login = () => {
                 onClick={handleForgotPassword}
               >
                 Forget Password?{" "}
-                <span className="text-[#BBCDE5] hover:underline">Click here</span>
+                <span className="text-[#BBCDE5] hover:underline">
+                  Click here
+                </span>
               </a>
             </div>
             <Button
