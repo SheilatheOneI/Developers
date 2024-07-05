@@ -16,9 +16,12 @@ module.exports = {
         lapis: "#1c5d99",
         powder: "#bbcde5",
       },
-      backgroundImage: {
-        landing: "url('src/images/landing2.png')",
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
       },
+      // backgroundImage: {
+      //   landing: "url('src/images/landing2.png')",
+      // },
     },
   },
   variants: {
