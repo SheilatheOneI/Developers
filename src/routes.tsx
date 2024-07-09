@@ -1,4 +1,4 @@
-import { useRoutes} from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import Signup from "./pages/signup";
 import Connect from "./pages/connect";
 import Profile from "./pages/userprofile";
@@ -7,8 +7,7 @@ import UserProfile from "./pages/profile";
 import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
-import Forgot from "./pages/Forgot";
-
+import ForgotPassword from "./pages/Forgot";
 
 const Router = () => {
   const routes = useRoutes([

@@ -3,6 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { Button, Link } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { H1 } from "../components/typography";
 
 type formValues = {
   email: string;
@@ -60,21 +61,21 @@ const Login = () => {
     <div className="flex flex-col h-screen items-center bg-w overflow-hidden">
       <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
         <div className="w-full max-w-md p-8 bg-white border-2 rounded-2xl shadow-md">
-          <div className="flex justify-center mb-4">
+          {/* <div className="flex justify-center mb-4">
             <img
               src="src/images/logo2.jpg"
               alt="DevConnect Logo"
               className="w-20 h-20 rounded-full"
             />
-          </div>
-          <h1 className="mb-2 text-2xl font-bold text-center">DevConnect</h1>
+          </div> */}
+          <H1 className="mb-2 text-4xl font text-center">DevConnect</H1>
           <p className="mb-4 text-center">Login to continue</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <input
                 type="text"
                 id="email"
-                className="p-2 border-2 rounded-xl"
+                className="py-2  px-6 border-2 rounded-full"
                 placeholder="Email"
                 {...register("email", { required: "This field is required" })}
               />
@@ -88,7 +89,7 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                className="p-2 border-2 rounded-xl"
+                className="py-2 px-6 border-2 rounded-full"
                 placeholder="Password"
                 {...register("password", {
                   required: "This field is required",
@@ -101,28 +102,28 @@ const Login = () => {
               )}
             </div>
             <div className="flex justify-center">
-              <a
-                href="#"
-                className="text-sm text-[#1C5D99] cursor-pointer"
+              <span className="text-sm">Forgot Password? </span>
+              <Link
+                href="/forgot-password"
+                className="text-sm text-lapis cursor-pointer"
                 onClick={handleForgotPassword}
               >
-                Forget Password?{" "}
                 <span className="text-[#BBCDE5] hover:underline">
                   Click here
                 </span>
-              </a>
+              </Link>
             </div>
             <Button
               type="submit"
-              className="w-full py-2 text-white bg-[#1C5D99] rounded-xl"
+              className="w-full py-2 text-white bg-[#1C5D99] rounded-full my-0"
             >
               Log In
             </Button>
           </form>
-          <div className="mt-4 text-center mb-1 ">
-            <p> Don't have an account?</p>
+          <div className="mt-2 text-center mb-1 ">
+            <span className="text-sm"> Don't have an account?</span>
             <Link href="/signup">
-              <p className="text-[#BBCDE5] hover:underline">Sign up</p>
+              <span className="text-[#BBCDE5] hover:underline">Sign up</span>
             </Link>
           </div>
           <DevTool control={control} />

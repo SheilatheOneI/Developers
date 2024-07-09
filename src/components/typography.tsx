@@ -9,7 +9,7 @@ interface TypographyProps {
 export const H1 = ({ children, className }: TypographyProps) => (
   <h1
     className={clsx(
-      "text-[1.5rem] xs:text-[1rem] md:text-[2.0rem] lg:text-[2.5rem]  2xl:text-[3.5rem] text-prmary-default font-semibold",
+      "text-[1.5rem] xs:text-[1rem] md:text-[2.0rem] lg:text-[2.5rem]  2xl:text-[3.5rem] text-prmary-default ",
       className
     )}
   >
