@@ -10,7 +10,7 @@ interface Developer {
   specialization: string;
   rate: number;
   bio: string;
-  phone_number: any;
+  phone_number: string | undefined;
   first_name: string;
 }
 
@@ -24,8 +24,25 @@ const Profile: React.FC = () => {
 
   const Logout = useNavigate();
 
-  const handleLogout = () => {
-    Logout("/login");
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem("jwtToken");
+
+      Logout("/login");
+
+      // console.log("succesfull logout");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   useEffect(() => {
@@ -65,14 +82,17 @@ const Profile: React.FC = () => {
     e.preventDefault();
     if (formValues) {
       try {
-        // const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("jwtToken");
+        console.log(token);
+
         const response = await fetch(
           `http://localhost:5000/api/freelancer/update`,
           {
             method: "PUT",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(formValues),
           }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { H1 } from "../components/typography";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -64,25 +65,25 @@ const Signup: React.FC = () => {
       </button>
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-12 border-2 border-grey"
+        className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-8 border-2 border-grey"
       >
-        <img
+        {/* <img
           src="src/images/logo2.jpg"
           alt="Logo"
           className="h-16 w-16 mx-auto mb-4 rounded-full"
-        />
-        <h1 className="text-2xl font-semibold text-center mb-6">
-          Sign up to get started
-        </h1>
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+        /> */}
+        <H1 className="mb-2 text-4xl font text-center">DevConnect</H1>
+
+        <h1 className="text-xl text-center mb-6">Sign up to get started</h1>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-2">
             <input
               type="text"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
               placeholder="First Name"
-              className="w-1/2 p-2 border rounded-lg"
+              className="w-1/2 px-4 py-2 border rounded-full"
             />
             <input
               type="text"
@@ -90,7 +91,7 @@ const Signup: React.FC = () => {
               value={formData.lastName}
               onChange={handleChange}
               placeholder="Last Name"
-              className="w-1/2 p-2 border rounded-lg"
+              className="w-1/2 px-4 py-2 border rounded-full"
             />
           </div>
           <input
@@ -99,7 +100,7 @@ const Signup: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="E-mail Address"
-            className="w-full p-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-full"
           />
           <input
             type="password"
@@ -107,7 +108,7 @@ const Signup: React.FC = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Create your Password"
-            className="w-full p-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-full"
           />
           <input
             type="password"
@@ -115,7 +116,7 @@ const Signup: React.FC = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder="Confirm Password"
-            className="w-full p-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-full"
           />
         </div>
         <div className="flex items-center gap-2 mt-4">
@@ -136,7 +137,7 @@ const Signup: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-[#1C5D99] text-white py-2 rounded hover:bg-[#164973] transition-colors mt-4"
+          className="w-full bg-[#1C5D99] text-white py-2 rounded-full hover:bg-[#164973] transition-colors mt-4"
         >
           Sign Up
         </button>

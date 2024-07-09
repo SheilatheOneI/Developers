@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { H1 } from "../components/typography";
 
 type FormValues = {
   username: string;
@@ -29,7 +30,7 @@ const Admin = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log(data)
+      console.log(data);
 
       if (!response.ok) {
         throw new Error("Login failed");
@@ -47,21 +48,23 @@ const Admin = () => {
 
   return (
     <main>
-      <section className="flex flex-col h-[90%] mt-20 justify-center items-center mx-auto p-10 border-moonstone border-2 rounded-lg w-max md:w-[36%]">
-        <section className="text-center mb-10">
-          <img
+      <section className="flex flex-col h-[90%] mt-20 justify-center items-center mx-auto p-4 border-moonstone border-1 rounded-lg w-max md:w-[36%]">
+        <section className="text-center mb-4">
+          {/* <img
             src="/src/images/logo2.jpg"
             alt="Logo"
             className="w-36 h-36 rounded-full mx-auto mb-4"
-          />
-          <h1 className="font-bold text-2xl">Admin Login</h1>
+          /> */}
+          <H1 className="mb-0 text-4xl font text-center">DevConnect</H1>
+
+          <p className="">Admin Login</p>
         </section>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-xs">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-full">
           <div className="mb-4">
             <input
               type="text"
               id="username"
-              className="w-full p-3 border border-gray-400 rounded-xl"
+              className="w-full py-3 pl-6 box-border border border-gray-400 rounded-full"
               placeholder="Username"
               {...register("username", { required: "Username is required" })}
             />
@@ -73,7 +76,7 @@ const Admin = () => {
             <input
               type="password"
               id="password"
-              className="w-full p-3 border border-gray-400 rounded-xl"
+              className="w-full py-3 pl-6 box-border border border-gray-400 rounded-full"
               placeholder="Password"
               {...register("password", {
                 required: "Password is required",
@@ -85,7 +88,7 @@ const Admin = () => {
           </div>
           <Button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg"
+            className="w-full text-lg bg-lapis my-0 text-white py-2 rounded-full"
           >
             Login
           </Button>

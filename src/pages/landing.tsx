@@ -78,11 +78,11 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <main className="container mx-auto px-4 py-8">
-        <H2 className="text-center text-3xl font-bold mb-8">
+      <main className="container mx-auto mt-6">
+        <H2 className="text-center text-3xl font-bold mb-4">
           Connect, Collaborate, Create
         </H2>
-        <p className="text-center mb-8">Look no further</p>
+        <p className="text-center mb-5">Look no further</p>
         <div className="relative max-w-2xl mx-auto mb-8">
           <input
             type="text"
@@ -147,10 +147,10 @@ const Landing = () => {
                   </p>
                 </div>
                 <div className="flex mt-1 gap-2">
-                  <Button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full flex items-center">
+                  <Button className="bg-blue-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
                     <FaPhoneAlt className="mr-2" /> Call
                   </Button>
-                  <Button className="bg-green-500 text-white font-bold py-2 px-4 rounded-full flex items-center">
+                  <Button className="bg-green-500 text-white font-bold  px-4 py-1 rounded-full flex items-center">
                     <FaEnvelope className="mr-2" /> Email
                   </Button>
                 </div>
