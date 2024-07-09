@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { Button, Link } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 type formValues = {
   email: string;
@@ -19,8 +20,9 @@ const Login = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
   const navigate = useNavigate();
+  const { login } = useAuth(); // Use the login function from the auth context
 
-  const login = async (data: formValues) => {
+  const loginUser = async (data: formValues) => {
     try {
       const response = await fetch(`http://localhost:5000/api/auth/login`, {
         method: "POST",
@@ -39,6 +41,7 @@ const Login = () => {
 
       console.log(result.user._id);
 
+      login(); // Call the login function to update the auth state
       navigate(`/userprofile/${result.user._id}`);
     } catch (error) {
       console.error("Error:", error);
@@ -46,15 +49,15 @@ const Login = () => {
   };
 
   const onSubmit = (data: formValues) => {
-    login(data);
+    loginUser(data);
   };
 
   const handleForgotPassword = () => {
-    navigate("/forgot-password"); // Navigate to the forgot password page
+    navigate("/forgot-password");
   };
 
   return (
-    <div className="flex flex-col h-screen items-center bg-white overflow-hidden">
+    <div className="flex flex-col h-screen items-center bg-w overflow-hidden">
       <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
         <div className="w-full max-w-md p-8 bg-white border-2 rounded-2xl shadow-md">
           <div className="flex justify-center mb-4">

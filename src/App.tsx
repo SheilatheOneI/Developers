@@ -1,10 +1,17 @@
+// App.tsx
+import { AuthProvider } from "./context/AuthContext";
 import Providers from "./provider";
 import Router from "./routes";
+
+
 const App = () => {
   return (
-    <Providers>
-      <Router />
-    </Providers>
+    <AuthProvider> 
+      <Providers>
+        <Router />
+      </Providers>
+    </AuthProvider>
   );
 };
+
 export default App;
