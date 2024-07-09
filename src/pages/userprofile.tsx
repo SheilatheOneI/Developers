@@ -70,6 +70,7 @@ const Profile: React.FC = () => {
           `http://localhost:5000/api/freelancer/update`,
           {
             method: "PUT",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },

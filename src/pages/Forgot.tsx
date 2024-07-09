@@ -62,7 +62,9 @@ const ForgotPassword: React.FC = () => {
       </button>
       <div className="bg-white shadow-md rounded-2xl p-8 max-w-sm w-full">
         <h1 className="text-3xl font-semibold text-center mb-1">DevConnect</h1>
-        <p className="text-lg text-center mb-2 font-medium text-gray-600">Forgot Your Password</p>
+        <p className="text-lg text-center mb-2 font-medium text-gray-600">
+          Forgot Your Password
+        </p>
         <p className="text-center mb-6 text-sm text-gray-500">
           Enter your email address to receive the link to reset your password.
         </p>
