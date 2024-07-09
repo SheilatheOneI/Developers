@@ -24,8 +24,8 @@ const Profile: React.FC = () => {
 
   const { logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/login");
   };
 
@@ -65,6 +65,9 @@ const Profile: React.FC = () => {
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formValues) {
+      const token = localStorage.getItem("jwtToken");
+      console.log(token);
+
       try {
         const response = await fetch(
           `http://localhost:5000/api/freelancer/update`,
@@ -73,6 +76,8 @@ const Profile: React.FC = () => {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+
             },
             body: JSON.stringify(formValues),
           }

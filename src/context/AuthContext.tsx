@@ -3,7 +3,7 @@ import { createContext, useState, useContext, ReactNode } from 'react';
 interface AuthContextType {
   isLoggedIn: boolean;
   login: () => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -16,7 +16,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const login = () => setIsLoggedIn(true);
-  const logout = () => setIsLoggedIn(false);
+  const logout = async () => {
+    const token = localStorage.getItem("jwtToken");
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem("jwtToken");
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
