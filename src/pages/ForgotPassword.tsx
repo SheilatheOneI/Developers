@@ -6,11 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!email) {
       setError("Email is required");
       return;
@@ -52,50 +52,57 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen flex items-center justify-center bg-w p-4">
       <ToastContainer className="toast-container" />
       <button
-        className="absolute top-4 left-4 text-[#1C5D99] hover:underline"
-        onClick={() => navigate("/")}
+        className="absolute top-16 left-12 text-[#1C5D99] hover:underline"
+        onClick={() => navigate("/login")}
       >
         &larr; Back
       </button>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-12 border-2 border-grey"
-      >
-        <h1 className="text-2xl font-semibold text-center mb-6">
-          Forgot Your Password?
-        </h1>
-        <p className="text-center mb-6">
-          Enter your email address below and we'll send you a link to reset your
-          password.
+      <div className="bg-white shadow-md rounded-2xl p-8 max-w-sm w-full">
+        <h1 className="text-3xl font-semibold text-center mb-1">DevConnect</h1>
+        <p className="text-lg text-center mb-2 font-medium text-gray-600">Forgot Your Password</p>
+        <p className="text-center mb-6 text-sm text-gray-500">
+          Enter your email address to receive the link to reset your password.
         </p>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setError(null); // Clear error when input changes
-          }}
-          placeholder="Your Email Address"
-          className="w-full p-2 border rounded-lg"
-        />
-        {error && <p className="text-red-500 text-sm">{error}</p>} 
-        <button
-          type="submit"
-          className="w-full bg-[#1C5D99] text-white py-2 rounded hover:bg-[#164973] transition-colors mt-4"
-        >
-          Send Reset Link
-        </button>
-      </form>
-
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(null);
+            }}
+            placeholder="Your Email"
+            className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
+          />
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm"
+          >
+            Send Link
+          </button>
+        </form>
+        <p className="text-center mt-4 text-sm text-gray-500">
+          Remembered your password?{" "}
+          <span
+            className="text-[#1C5D99] cursor-pointer hover:underline"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </span>
+        </p>
+      </div>
       <style>{`
         .toast-container {
           width: 100%;
-          max-width: 400px; /* Adjust maximum width as needed */
-          @media (max-width: 768px) {
-            max-width: 80%; /* Responsive adjustment for smaller screens */
+          max-width: 400px;
+        }
+        @media (max-width: 768px) {
+          .toast-container {
+            max-width: 80%;
           }
         }
       `}</style>

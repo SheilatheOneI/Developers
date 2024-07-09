@@ -4,14 +4,14 @@ import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
 type FormValues = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const Admin = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -60,13 +60,13 @@ const Admin = () => {
           <div className="mb-4">
             <input
               type="text"
-              id="username"
+              id="email"
               className="w-full p-3 border border-gray-400 rounded-xl"
-              placeholder="Username"
-              {...register("username", { required: "Username is required" })}
+              placeholder="Email"
+              {...register("email", { required: "Email is required" })}
             />
             <p className="text-red-500 text-sm mt-1">
-              {errors.username?.message}
+              {errors.email?.message}
             </p>
           </div>
           <div className="mb-6">

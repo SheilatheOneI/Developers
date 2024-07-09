@@ -55,13 +55,13 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 relative">
-      <button
+    <div className="min-h-screen bg-w flex flex-col items-center justify-center p-8 relative">
+      {/* <button
         className="absolute top-4 left-4 text-[#1C5D99] hover:underline"
         onClick={() => navigate("/")}
       >
         &larr; Back
-      </button>
+      </button> */}
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-12 border-2 border-grey"
