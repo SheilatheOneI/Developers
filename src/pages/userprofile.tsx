@@ -1,9 +1,9 @@
-import { Card } from "@nextui-org/react";
-import { H5, H6, Subtitle, Subtitle2 } from "../components/typography";
+import { H6, Subtitle, Subtitle2 } from "../components/typography";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { Value } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import { useAuth } from "../context/AuthContext";
 
 interface Developer {
   _id: number;
@@ -22,27 +22,11 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const Logout = useNavigate();
+  const { logout } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("jwtToken");
-
-      await fetch("http://localhost:5000/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      localStorage.removeItem("jwtToken");
-
-      Logout("/login");
-
-      // console.log("succesfull logout");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -82,9 +66,6 @@ const Profile: React.FC = () => {
     e.preventDefault();
     if (formValues) {
       try {
-        const token = localStorage.getItem("jwtToken");
-        console.log(token);
-
         const response = await fetch(
           `http://localhost:5000/api/freelancer/update`,
           {
@@ -92,7 +73,6 @@ const Profile: React.FC = () => {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(formValues),
           }
@@ -114,27 +94,27 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <section>
-      <section className="containerr mb-4 mt-3 p-2 flex justify-between">
+    <section className="min-h-screen bg-w">
+      <section className="container mx-auto p-4 flex justify-between items-center mb-4">
         <button
-          className="text-[#1C5D99] hover:underline pl-0"
+          className="text-[#1C5D99] hover:underline"
           onClick={() => navigate("/")}
         >
           &larr; Back
         </button>
         <div className="relative">
           <button
-            className="border-1 border-lapis py-1 px-4 rounded-full"
+            className="border border-[#1C5D99] py-1 px-4 rounded-full"
             onClick={toggleDropdown}
           >
             Welcome {developer.first_name}
           </button>
           {isDropdownVisible && (
-            <div className="absolute bg-white border-lapis border-1 rounded-lg shadow-md m-1 flex flex-col py-3 px-5 justify-center items-center">
+            <div className="absolute bg-white border border-[#1C5D99] rounded-lg shadow-md mt-1 flex flex-col py-2 px-4 justify-center items-center">
               <Link
                 key={developer._id}
                 to={`/profile/${developer._id}`}
-                className="mr-1 shadow-sm"
+                className="mb-2"
               >
                 {developer.first_name} Profile
               </Link>
@@ -143,25 +123,26 @@ const Profile: React.FC = () => {
           )}
         </div>
       </section>
-      <section className="mx-auto w-max pl-0 md:pt-2">
-        <section className="flex flex-col h-max w-max xs:px-3 sm:px-10 lg:px-20 py-4 text-center gap-y-1 md:mx-auto border-moonstone border-2 rounded-lg my-8 items-center justify-center">
-          <span className="flex">
-            <img
-              src="/src/images/logo2.jpg"
-              alt=""
-              className="w-max h-[6rem] rounded-full"
-            />
-          </span>
+      <section className="container mx-auto p-4 justify-center items-center">
+        <section className="flex flex-col items-center border-2 border-[#1C5D99] max-w-sm lg:max-w-lg  rounded-lg p-6 bg-white shadow-md ml-96 ">
+          <img
+            src="/src/images/logo2.jpg"
+            alt=""
+            className="w-24 h-24 rounded-full mb-4"
+          />
           <Subtitle className="font-bold">{developer.first_name}</Subtitle>
 
           {isEditing ? (
-            <form onSubmit={handleEdit} className="flex flex-col gap-y-4 w-96">
+            <form
+              onSubmit={handleEdit}
+              className="flex flex-col gap-y-4 w-full max-w-md"
+            >
               <input
                 type="text"
                 name="specialization"
                 value={formValues.specialization}
                 onChange={handleChange}
-                className="border p-2"
+                className="border p-2 rounded"
                 placeholder="Specialization"
               />
               <input
@@ -169,60 +150,56 @@ const Profile: React.FC = () => {
                 name="rate"
                 value={formValues.rate}
                 onChange={handleChange}
-                className="border p-2"
+                className="border p-2 rounded"
                 placeholder="Rate"
               />
               <textarea
                 name="bio"
                 value={formValues.bio}
                 onChange={handleChange}
-                className="border p-2"
+                className="border p-2 rounded"
                 placeholder="Bio"
               />
               <PhoneInput
                 defaultCountry="KE"
                 placeholder="Enter phone number"
                 value={formValues.phone_number || ""}
-                onChange={(value) =>
+                onChange={(value: Value) =>
                   setFormValues({ ...formValues, phone_number: value })
                 }
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               />
-              <button
-                type="submit"
-                className="bg-blue-500 text-white p-2 rounded"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="bg-gray-500 text-white p-2 rounded"
-              >
-                Cancel
-              </button>
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="bg-gray-500 text-white py-2 px-4 rounded w-full"
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           ) : (
             <>
-              <H6 className="font-bold">{developer.specialization}</H6>
-              <Subtitle2 className="font-bold text-yellow-500">
-                Rates: ${developer.rate}
+              <H6 className="font-bold mt-2">{developer.specialization}</H6>
+              <Subtitle2 className="text-[#1C5D99]">
+                Rate: {developer.rate} USD/hr
               </Subtitle2>
-              <H5 className="underline italic">Bio</H5>
-              <p className="text-wrap max-w-2xl text-base">{developer.bio}</p>
-              <Card className="w-[90%]">
-                <H5 className="underline italic">Contacts</H5>
-                <section className="p-0 flex flex-col my-1 gap-x-2 gap-y-2">
-                  <h5 className="text-start pl-2">
-                    Phone: {developer.phone_number}
-                  </h5>
-                </section>
-              </Card>
+              <p className="text-[#1C5D99] font-medium mt-2">{developer.bio}</p>
+              <p className="text-[#1C5D99] font-medium mt-1">
+                Phone Number: {developer.phone_number}
+              </p>
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-blue-500 text-white p-1 rounded mt-3 w-36"
+                className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
               >
-                Edit
+                Edit Profile
               </button>
             </>
           )}

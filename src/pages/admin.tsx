@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { H1 } from "../components/typography";
 
 type FormValues = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const Admin = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -63,14 +63,12 @@ const Admin = () => {
           <div className="mb-4">
             <input
               type="text"
-              id="username"
+              id="email"
               className="w-full py-3 pl-6 box-border border border-gray-400 rounded-full"
-              placeholder="Username"
-              {...register("username", { required: "Username is required" })}
+              placeholder="Email"
+              {...register("email", { required: "Email is required" })}
             />
-            <p className="text-red-500 text-sm mt-1">
-              {errors.username?.message}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.email?.message}</p>
           </div>
           <div className="mb-6">
             <input

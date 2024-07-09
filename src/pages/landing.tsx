@@ -22,7 +22,9 @@ const Landing = () => {
 
   const fetchSpecializations = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/specializations");
+      const response = await fetch(
+        `http://localhost:5000/api/users/specialization/specializations`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -77,9 +79,9 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <main className="container mx-auto mt-6">
-        <H2 className="text-center text-3xl font-bold mb-4">
+    <div className="min-h-screen bg-white overflow-hidden">
+      <main className="container mx-auto px-4 py-8">
+        <H2 className="text-center text-3xl font-bold mb-8">
           Connect, Collaborate, Create
         </H2>
         <p className="text-center mb-5">Look no further</p>
