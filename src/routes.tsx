@@ -29,7 +29,7 @@ const Router = () => {
         },
         {
           path: "/forgot-password",
-          element: <Forgot />,
+          element: <ForgotPassword />,
         },
 
         {
