@@ -127,7 +127,7 @@ const Landing = () => {
         </div>
         <h3 className="text-2xl text-center font-bold mb-4">Recent Searches</h3>
         <div className="flex flex-wrap justify-center gap-4">
-          {filteredDevelopers.slice(-8).map((developer) => (
+          {filteredDevelopers.slice(-6).map((developer) => (
             <Link
               key={developer._id}
               href={`/profile/${developer._id}`}

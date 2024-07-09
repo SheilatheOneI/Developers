@@ -7,7 +7,8 @@ import UserProfile from "./pages/profile";
 import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
-import ForgotPassword from "./pages/ForgotPassword";
+import Forgot from "./pages/Forgot";
+
 
 const Router = () => {
   const routes = useRoutes([
@@ -29,7 +30,7 @@ const Router = () => {
         },
         {
           path: "/forgot-password",
-          element: <ForgotPassword />,
+          element: <Forgot />,
         },
 
         {

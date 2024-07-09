@@ -20,7 +20,7 @@ const Login = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
   const navigate = useNavigate();
-  const { login } = useAuth(); // Use the login function from the auth context
+  const { login } = useAuth(); 
 
   const loginUser = async (data: formValues) => {
     try {
@@ -37,7 +37,7 @@ const Login = () => {
       }
 
       const result = await response.json();
-      // localStorage.setItem("jwtToken", result.token);
+      localStorage.setItem("jwtToken", result.user.token);
 
       console.log(result.user._id);
 
