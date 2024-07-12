@@ -8,6 +8,7 @@ import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
 import ForgotPassword from "./pages/Forgot";
+import ResetPassword from "./pages/ResetPassword";
 
 const Router = () => {
   const routes = useRoutes([
@@ -30,6 +31,11 @@ const Router = () => {
         {
           path: "/forgot-password",
           element: <ForgotPassword />,
+        },
+        {
+          path: "/reset-password/:token",
+          element: <ResetPassword />,
+
         },
 
         {
