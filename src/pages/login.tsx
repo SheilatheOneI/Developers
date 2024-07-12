@@ -42,7 +42,7 @@ const Login = () => {
 
       console.log(result.user._id);
 
-      login(); // Call the login function to update the auth state
+      login(); // Ensure login() is called correctly
       navigate(`/userprofile/${result.user._id}`);
     } catch (error) {
       console.error("Error:", error);
@@ -61,6 +61,7 @@ const Login = () => {
     <div className="flex flex-col h-screen items-center bg-w overflow-hidden">
       <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
         <div className="w-full max-w-md p-8 bg-white border-2 rounded-2xl shadow-md">
+          {/* Uncomment the following block if you want to include the logo */}
           {/* <div className="flex justify-center mb-4">
             <img
               src="src/images/logo2.jpg"
@@ -71,11 +72,11 @@ const Login = () => {
           <H1 className="mb-2 text-4xl font text-center">DevConnect</H1>
           <p className="mb-4 text-center">Login to continue</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex flex-col ">
+            <div className="flex flex-col">
               <input
                 type="text"
                 id="email"
-                className="py-2  px-6 border-2 rounded-full"
+                className="py-2 px-6 border-2 rounded-full"
                 placeholder="Email"
                 {...register("email", { required: "This field is required" })}
               />
@@ -120,7 +121,7 @@ const Login = () => {
               Log In
             </Button>
           </form>
-          <div className="mt-2 text-center mb-1 ">
+          <div className="mt-2 text-center mb-1">
             <span className="text-sm"> Don't have an account?</span>
             <Link href="/signup">
               <span className="text-[#BBCDE5] hover:underline">Sign up</span>

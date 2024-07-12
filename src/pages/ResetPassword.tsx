@@ -1,55 +1,66 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ForgotPassword: React.FC = () => {
+const ResetPassword: React.FC = () => {
+  const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email) {
-      setError("Email is required");
+    if (!password || !confirmPassword) {
+      setError("Both password fields are required");
       return;
-    } else {
-      setError(null);
     }
 
-    try {
-      await sendResetEmail(email);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-      toast.success("Reset link sent successfully!", {
+    if (!token) {
+      setError("Invalid or missing token");
+      return;
+    }
+
+    setError(null);
+
+    try {
+      await resetPassword(token, password);
+
+      toast.success("Password reset successfully!", {
         position: "top-right",
       });
 
       setTimeout(() => {
-        navigate("/reset-password/:token");
-      }, 3000); // 3 seconds delay
+        navigate("/login");
+      }, 3000);
     } catch (error) {
       console.error("Error during password reset:", error);
 
-      toast.error("Failed to send reset link. Please try again later.", {
+      toast.error("Failed to reset password. Please try again later.", {
         position: "top-right",
       });
     }
   };
 
-  const sendResetEmail = async (email: string) => {
-    console.log("Sending password reset email to:", email);
-
-    const response = await fetch(`http://localhost:5000/api/auth/forgot-password`, {
+  const resetPassword = async (token: string, password: string) => {
+    const response = await fetch(`http://localhost:5000/api/auth/reset-password/19d3767e9bad4b337b06414f43d785f8ad70073b`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ token, password }),
     });
+    console.log(password)
 
     if (!response.ok) {
-      throw new Error("Failed to send reset link");
+      throw new Error("Failed to reset password");
     }
   };
 
@@ -65,20 +76,30 @@ const ForgotPassword: React.FC = () => {
       <div className="bg-white shadow-md rounded-2xl p-8 max-w-sm w-full">
         <h1 className="text-3xl font-semibold text-center mb-1">DevConnect</h1>
         <p className="text-lg text-center mb-2 font-medium text-gray-600">
-          Forgot Your Password
+          Reset Your Password
         </p>
         <p className="text-center mb-6 text-sm text-gray-500">
-          Enter your email address to receive the link to reset your password.
+          Enter your new password below.
         </p>
         <form onSubmit={handleSubmit}>
           <input
-            type="email"
-            value={email}
+            type="password"
+            value={password}
             onChange={(e) => {
-              setEmail(e.target.value);
+              setPassword(e.target.value);
               setError(null);
             }}
-            placeholder="Your Email"
+            placeholder="New Password"
+            className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
+          />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              setError(null);
+            }}
+            placeholder="Confirm New Password"
             className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
           />
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -86,18 +107,9 @@ const ForgotPassword: React.FC = () => {
             type="submit"
             className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm"
           >
-            Send Link
+            Reset Password
           </button>
         </form>
-        <p className="text-center mt-4 text-sm text-gray-500">
-          Remembered your password?{" "}
-          <span
-            className="text-[#1C5D99] cursor-pointer hover:underline"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </span>
-        </p>
       </div>
       <style>{`
         .toast-container {
@@ -114,4 +126,4 @@ const ForgotPassword: React.FC = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
