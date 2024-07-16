@@ -194,31 +194,33 @@ const Profile: React.FC = () => {
       </div>
 
       {isEditing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-bold mb-4">Edit Profile</h2>
-            <form onSubmit={handleEdit} className="space-y-4">
-              <input
-                type="text"
-                name="specialization"
-                value={formValues.specialization}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Specialization"
-              />
-              <input
-                type="number"
-                name="rate"
-                value={formValues.rate}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Rate"
-              />
+            <form onSubmit={handleEdit} className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="specialization"
+                  value={formValues.specialization}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Specialization"
+                />
+                <input
+                  type="number"
+                  name="rate"
+                  value={formValues.rate}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Rate"
+                />
+              </div>
               <textarea
                 name="bio"
                 value={formValues.bio}
                 onChange={handleChange}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full h-24"
                 placeholder="Bio"
               />
               <PhoneInput
@@ -230,33 +232,35 @@ const Profile: React.FC = () => {
                 }
                 className="w-full p-2 border border-gray-300 rounded"
               />
-              <input
-                type="text"
-                name="location"
-                value={formValues.location}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Location"
-              />
-              <input
-                type="text"
-                name="jobType"
-                value={formValues.jobType}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Job Type"
-              />
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="location"
+                  value={formValues.location}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Location"
+                />
+                <input
+                  type="text"
+                  name="jobType"
+                  value={formValues.jobType}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Job Type"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+                  className="bg-blue-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white py-2 px-4 rounded w-full"
+                  className="bg-gray-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
                 >
                   Cancel
                 </button>
