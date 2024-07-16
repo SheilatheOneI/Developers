@@ -65,7 +65,7 @@ const Signup: React.FC = () => {
       </button> */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-8 border-2 border-grey"
+        className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-6 border-2 border-grey"
       >
         {/* <img
           src="src/images/logo2.jpg"

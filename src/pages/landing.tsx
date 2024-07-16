@@ -128,15 +128,15 @@ const Landing = () => {
           ))}
         </div>
         <h3 className="text-2xl text-center font-bold mb-4">Recent Searches</h3>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4"> 
           {filteredDevelopers.slice(-6).map((developer) => (
             <Link
               key={developer._id}
               href={`/profile/${developer._id}`}
               className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start text-left hover:shadow-lg transition-shadow"
-              // style={{ width: '250px', height: '210px' }}
+              // style={{ width: '250px', height: '210px' }}  
             >
-              <div className="flex flex-col justify-between h-max">
+              <div className="flex flex-col justify-between "> 
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">
                     {developer.first_name} {developer.last_name}
@@ -152,7 +152,7 @@ const Landing = () => {
                   <Button className="bg-blue-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
                     <FaPhoneAlt className="mr-2" /> Call
                   </Button>
-                  <Button className="bg-green-500 text-white font-bold  px-4 py-1 rounded-full flex items-center">
+                  <Button className="bg-green-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
                     <FaEnvelope className="mr-2" /> Email
                   </Button>
                 </div>
