@@ -12,6 +12,8 @@ interface Developer {
   rate: number;
   phone_number: string;
   email: string;
+  jobType: string;
+  location: string;
 }
 
 const UserProfile: React.FC = () => {
@@ -51,6 +53,8 @@ const UserProfile: React.FC = () => {
           />
         </span>
         <H5 className="font-bold text-lg md:text-xl">{developer.first_name}</H5>
+        <H5 className="font-bold text-lg md:text-xl">{developer.jobType}</H5>
+        <H5 className="font-bold text-lg md:text-xl">{developer.location}</H5>
         <Subtitle2 className="font-bold text-md md:text-lg">
           {developer.specialization}
         </Subtitle2>

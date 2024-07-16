@@ -7,19 +7,13 @@ const ResetPassword: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!password || !confirmPassword) {
-      setError("Both password fields are required");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    if (!password) {
+      setError("Password is required");
       return;
     }
 
@@ -39,7 +33,7 @@ const ResetPassword: React.FC = () => {
 
       setTimeout(() => {
         navigate("/login");
-      }, 3000);
+      }, 2000);
     } catch (error) {
       console.error("Error during password reset:", error);
 
@@ -50,14 +44,13 @@ const ResetPassword: React.FC = () => {
   };
 
   const resetPassword = async (token: string, password: string) => {
-    const response = await fetch(`http://localhost:5000/api/auth/reset-password/19d3767e9bad4b337b06414f43d785f8ad70073b`, {
+    const response = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token, password }),
     });
-    console.log(password)
 
     if (!response.ok) {
       throw new Error("Failed to reset password");
@@ -90,16 +83,6 @@ const ResetPassword: React.FC = () => {
               setError(null);
             }}
             placeholder="New Password"
-            className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
-          />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-              setError(null);
-            }}
-            placeholder="Confirm New Password"
             className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
           />
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
