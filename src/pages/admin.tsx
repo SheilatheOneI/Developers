@@ -23,14 +23,16 @@ const Admin = () => {
 
   const adminLogin = async (data: FormValues) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log(data);
+      const response = await fetch(
+        `https://gigit.onrender.com/api/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Login failed");
@@ -47,24 +49,18 @@ const Admin = () => {
   };
 
   return (
-    <main>
-      <section className="flex flex-col h-[90%] mt-20 justify-center items-center mx-auto p-4 border-moonstone border-1 rounded-lg w-max md:w-[36%]">
+    <main className="flex items-center justify-center min-h-screen p-4">
+      <section className="flex flex-col justify-center items-center p-8 border border-moonstone rounded-lg w-full max-w-xs sm:max-w-sm md:max-w-md bg-white">
         <section className="text-center mb-4">
-          {/* <img
-            src="/src/images/logo2.jpg"
-            alt="Logo"
-            className="w-36 h-36 rounded-full mx-auto mb-4"
-          /> */}
-          <H1 className="mb-0 text-4xl font text-center">DevConnect</H1>
-
-          <p className="">Admin Login</p>
+          <H1 className="mb-0 text-4xl font-bold">DevConnect</H1>
+          <p className="text-lg">Admin Login</p>
         </section>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="mb-4">
             <input
               type="text"
               id="email"
-              className="w-full py-3 pl-6 box-border border border-gray-400 rounded-full"
+              className="w-full py-3 pl-6 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-lapis"
               placeholder="Email"
               {...register("email", { required: "Email is required" })}
             />
@@ -74,11 +70,9 @@ const Admin = () => {
             <input
               type="password"
               id="password"
-              className="w-full py-3 pl-6 box-border border border-gray-400 rounded-full"
+              className="w-full py-3 pl-6 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-lapis"
               placeholder="Password"
-              {...register("password", {
-                required: "Password is required",
-              })}
+              {...register("password", { required: "Password is required" })}
             />
             <p className="text-red-500 text-sm mt-1">
               {errors.password?.message}
@@ -86,7 +80,7 @@ const Admin = () => {
           </div>
           <Button
             type="submit"
-            className="w-full text-lg bg-lapis my-0 text-white py-2 rounded-full"
+            className="w-full text-lg bg-lapis text-white py-2 rounded-full"
           >
             Login
           </Button>

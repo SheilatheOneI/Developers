@@ -4,7 +4,11 @@ import PhoneInput, { Value } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { H6, Subtitle, Subtitle2 } from "../components/typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPhone, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faPhone,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Developer {
   last_name: string;
@@ -43,7 +47,9 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchDeveloper = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${id}`);
+        const response = await fetch(
+          `https://gigit.onrender.com/api/users/${id}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -65,19 +71,19 @@ const Profile: React.FC = () => {
     const { name, value, type } = e.target;
     setFormValues((prev) => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value,
+      [name]: type === "number" ? Number(value) : value,
     }));
   };
 
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = localStorage.getItem("jwtToken");
-  
+
     console.log("Form Values being sent:", formValues);
-  
+
     try {
       const response = await fetch(
-        `http://localhost:5000/api/freelancer/update`,
+        `https://gigit.onrender.com/api/freelancer/update`,
         {
           method: "PUT",
           credentials: "include",
@@ -92,22 +98,22 @@ const Profile: React.FC = () => {
         throw new Error("Network response was not ok");
       }
       const updatedDeveloper = await response.json();
-      
+
       console.log("Updated Developer Data:", updatedDeveloper);
-      
+
       setDeveloper(updatedDeveloper);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating developer data:", error);
     }
   };
-  
+
   const handleDelete = async () => {
     const token = localStorage.getItem("jwtToken");
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/freelancer/delete/${id}`,
+        `https://gigit.onrender.com/api/freelancer/delete/${id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -143,8 +149,12 @@ const Profile: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="md:w-2/3 space-y-4">
             <div className="bg-white p-6 rounded-lg shadow">
-              <H6 className="text-red-200 mb-2 text-sm">Type: {developer.jobType}</H6>
-              <Subtitle className="font-bold text-sm mb-2">{developer.specialization}</Subtitle>
+              <H6 className="text-red-200 mb-2 text-sm">
+                Type: {developer.jobType}
+              </H6>
+              <Subtitle className="font-bold text-sm mb-2">
+                {developer.specialization}
+              </Subtitle>
               <Subtitle2 className="text-red-600 text-sm">
                 <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
                 {developer.location}
@@ -152,7 +162,9 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="font-bold text-sm mb-4 text-blue-400">Freelancer Bio</h2>
+              <h2 className="font-bold text-sm mb-4 text-blue-400">
+                Freelancer Bio
+              </h2>
               <p className="text-gray-700 mb-4 ">{developer.bio}</p>
               <h3 className="font-bold text-xs mb-2">Rate</h3>
               <p className="text-red-600 text-xs">${developer.rate} USD/hr</p>
@@ -162,8 +174,12 @@ const Profile: React.FC = () => {
           <div className="md:w-1/3 space-y-4">
             <div className="bg-white p-6 rounded-lg shadow">
               <h2 className="font-bold text-xs mb-4">Freelancer Info</h2>
-              <h3 className="font-bold text-xs mb-2">{developer.first_name} {developer.last_name}</h3>
-              <h4 className="font-bold text-xs mb-2 text-blue-400">Contact Information</h4>
+              <h3 className="font-bold text-xs mb-2">
+                {developer.first_name} {developer.last_name}
+              </h3>
+              <h4 className="font-bold text-xs mb-2 text-blue-400">
+                Contact Information
+              </h4>
               <p className="text-gray-700 text-xs">
                 <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
                 {developer.email}
@@ -194,31 +210,33 @@ const Profile: React.FC = () => {
       </div>
 
       {isEditing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-bold mb-4">Edit Profile</h2>
-            <form onSubmit={handleEdit} className="space-y-4">
-              <input
-                type="text"
-                name="specialization"
-                value={formValues.specialization}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Specialization"
-              />
-              <input
-                type="number"
-                name="rate"
-                value={formValues.rate}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Rate"
-              />
+            <form onSubmit={handleEdit} className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="specialization"
+                  value={formValues.specialization}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Specialization"
+                />
+                <input
+                  type="number"
+                  name="rate"
+                  value={formValues.rate}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Rate"
+                />
+              </div>
               <textarea
                 name="bio"
                 value={formValues.bio}
                 onChange={handleChange}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full h-24"
                 placeholder="Bio"
               />
               <PhoneInput
@@ -226,37 +244,42 @@ const Profile: React.FC = () => {
                 placeholder="Enter phone number"
                 value={formValues.phone_number}
                 onChange={(value: Value) =>
-                  setFormValues((prev) => ({ ...prev, phone_number: value || "" }))
+                  setFormValues((prev) => ({
+                    ...prev,
+                    phone_number: value || "",
+                  }))
                 }
                 className="w-full p-2 border border-gray-300 rounded"
               />
-              <input
-                type="text"
-                name="location"
-                value={formValues.location}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Location"
-              />
-              <input
-                type="text"
-                name="jobType"
-                value={formValues.jobType}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Job Type"
-              />
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  name="location"
+                  value={formValues.location}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Location"
+                />
+                <input
+                  type="text"
+                  name="jobType"
+                  value={formValues.jobType}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full"
+                  placeholder="Job Type"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+                  className="bg-blue-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white py-2 px-4 rounded w-full"
+                  className="bg-gray-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
                 >
                   Cancel
                 </button>

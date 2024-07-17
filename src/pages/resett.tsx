@@ -23,7 +23,7 @@ const ResetPassword: React.FC = () => {
     e.preventDefault();
 
     const response = await fetch(
-      `/http://localhost:5000/api/auth/reset-password/19d3767e9bad4b337b06414f43d785f8ad70073b`,
+      `/https://gigit.onrender.com/api/auth/reset-password/19d3767e9bad4b337b06414f43d785f8ad70073b`,
       {
         method: "POST",
         headers: {

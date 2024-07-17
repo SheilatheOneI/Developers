@@ -45,7 +45,7 @@ const ResetPassword: React.FC = () => {
 
   const resetPassword = async (token: string, password: string) => {
     const response = await fetch(
-      `http://localhost:5000/api/auth/reset-password/${token}`,
+      `https://gigit.onrender.com/api/auth/reset-password/${token}`,
       {
         method: "POST",
         headers: {

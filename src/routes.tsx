@@ -34,7 +34,7 @@ const Router = () => {
           element: <ForgotPassword />,
         },
         {
-          path: "/ResetPassword/:token",
+          path: "/reset-password/:resetToken",
           element: <ResetPassword />,
         },
 

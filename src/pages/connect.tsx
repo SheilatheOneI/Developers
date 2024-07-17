@@ -16,12 +16,15 @@ const Connect: React.FC = () => {
   const [developers, setDevelopers] = useState<Developer[]>([]);
   const [filteredDevelopers, setFilteredDevelopers] = useState<Developer[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [jobTitle, setJobTitle] = useState<string>("");
+  const [categories, setCategories] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/`);
+        const response = await fetch(`https://gigit.onrender.com/api/users/`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -39,13 +42,26 @@ const Connect: React.FC = () => {
 
   useEffect(() => {
     const searchTermRegex = new RegExp(searchTerm, "i");
+    const jobTitleRegex = new RegExp(jobTitle, "i");
+    const categoriesRegex = new RegExp(categories, "i");
     const filtered = developers.filter(
       (developer) =>
-        searchTermRegex.test(developer.first_name) ||
-        searchTermRegex.test(developer.specialization)
+        (searchTermRegex.test(developer.first_name) ||
+          searchTermRegex.test(developer.last_name) ||
+          searchTermRegex.test(developer.bio)) &&
+        jobTitleRegex.test(developer.specialization) &&
+        categoriesRegex.test(developer.specialization)
     );
     setFilteredDevelopers(filtered);
-  }, [searchTerm, developers]);
+  }, [searchTerm, jobTitle, categories, developers]);
+
+  const toggleViewMode = () => {
+    setViewMode((prevMode) => (prevMode === "list" ? "grid" : "list"));
+  };
+
+  // const truncateBio = (bio: string, maxLength: number) => {
+  //   return bio.length > maxLength ? bio.slice(0, maxLength) + "..." : bio;
+  // };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
@@ -57,8 +73,18 @@ const Connect: React.FC = () => {
           &larr; Back
         </button>
         <div className="flex items-center space-x-4">
-          <IoMdGrid className="text-gray-600" />
-          <IoMdList className="text-gray-600" />
+          <IoMdGrid
+            className={`text-gray-600 cursor-pointer ${
+              viewMode === "grid" && "text-blue-500"
+            }`}
+            onClick={toggleViewMode}
+          />
+          <IoMdList
+            className={`text-gray-600 cursor-pointer ${
+              viewMode === "list" && "text-blue-500"
+            }`}
+            onClick={toggleViewMode}
+          />
         </div>
       </div>
       <div className="flex flex-col md:flex-row">
@@ -72,6 +98,8 @@ const Connect: React.FC = () => {
               type="text"
               className="p-2 border rounded-lg w-full"
               placeholder="Designer, Manager etc..."
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -80,6 +108,8 @@ const Connect: React.FC = () => {
               type="text"
               className="p-2 border rounded-lg w-full text-sm"
               placeholder="Any Classification"
+              value={categories}
+              onChange={(e) => setCategories(e.target.value)}
             />
           </div>
         </div>
@@ -95,42 +125,39 @@ const Connect: React.FC = () => {
             />
           </div>
 
-          <div className="flex flex-col-reverse">
+          <div
+            className={`${
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                : "space-y-4"
+            }`}
+          >
             {filteredDevelopers.length > 0 ? (
-              filteredDevelopers.map((developer) => (
+              filteredDevelopers.slice(-8).map((developer) => (
                 <div
                   key={developer._id}
-                  className="relative bg-white p-4 rounded-lg mb-2 md:h-96"
-                  style={{
-                    height: "230px",
-                  }}
+                  className="bg-white p-4 rounded-lg shadow"
                 >
-                  <div className="flex flex-col md:flex-row items-start">
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-semibold">
-                          {developer.specialization}
-                        </span>
-                      </div>
-                      <h2 className="text-md font-semibold mb-1 mt-4 md:mt-8">
-                        {developer.first_name} {developer.last_name}
-                      </h2>
-                      <div className="flex items-center mb-1 text-yellow-500 text-sm flex-wrap md:flex-nowrap">
-                        <strong className="mr-2">Rate:</strong>
-                        <span>${developer.rate}/hour</span>
-                      </div>
-                      <p className="text-sm mb-2">{developer.bio}</p>
-                      <div className="bottom-4 left-4 right-4 flex gap-2">
-                        <Link
-                          to={`/profile/${developer._id}`}
-                          className="flex items-center bg-blue-500 text-white text-xs px-2 py-1 rounded-lg"
-                        >
-                          <FiSend className="mr-1 text-sm" />
-                          Read More
-                        </Link>
-                      </div>
-                    </div>
+                  <div className="mb-2">
+                    <span className="text-sm font-semibold">
+                      {developer.specialization}
+                    </span>
                   </div>
+                  <h2 className="text-md font-semibold mb-1">
+                    {developer.first_name} {developer.last_name}
+                  </h2>
+                  <div className="flex items-center mb-1 text-yellow-500 text-sm">
+                    <strong className="mr-2">Rate:</strong>
+                    <span>${developer.rate}/hour</span>
+                  </div>
+                  <p className="text-sm mb-2">{developer.bio}</p>
+                  <Link
+                    to={`/profile/${developer._id}`}
+                    className="inline-flex items-center bg-blue-500 text-white text-xs px-2 py-1 rounded-lg"
+                  >
+                    <FiSend className="mr-1 text-sm" />
+                    Read More
+                  </Link>
                 </div>
               ))
             ) : (

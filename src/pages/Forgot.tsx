@@ -46,7 +46,7 @@ const ForgotPassword: React.FC = () => {
     console.log("Sending password reset email to:", email);
 
     const response = await fetch(
-      `http://localhost:5000/api/auth/forgot-password`,
+      `https://gigit.onrender.com/api/auth/forgot-password`,
       {
         method: "POST",
         headers: {
