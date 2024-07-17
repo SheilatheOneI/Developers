@@ -24,7 +24,9 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     const fetchDeveloper = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${id}`);
+        const response = await fetch(
+          `https://gigit.onrender.com/api/users/${id}`
+        );
         const data = await response.json();
         console.log(data);
 
@@ -48,7 +50,7 @@ const UserProfile: React.FC = () => {
         <span className="flex justify-center mb-4">
           <img
             src="/src/images/logo2.jpg"
-            alt=""
+            alt="logo"
             className="w-24 h-24 md:w-32 md:h-32 rounded-full"
           />
         </span>

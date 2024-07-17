@@ -23,13 +23,16 @@ const Admin = () => {
 
   const adminLogin = async (data: FormValues) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `https://gigit.onrender.com/api/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Login failed");

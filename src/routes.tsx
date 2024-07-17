@@ -8,6 +8,7 @@ import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
 import ForgotPassword from "./pages/Forgot";
+// import ResetPassword from "./pages/resett";
 import ResetPassword from "./pages/ResetPassword";
 
 const Router = () => {
@@ -33,9 +34,8 @@ const Router = () => {
           element: <ForgotPassword />,
         },
         {
-          path: "/reset-password/:token",
+          path: "/reset-password/:resetToken",
           element: <ResetPassword />,
-
         },
 
         {

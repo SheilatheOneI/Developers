@@ -28,7 +28,9 @@ const NavbarLayout = () => {
   useEffect(() => {
     const fetchDeveloper = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${id}`);
+        const response = await fetch(
+          `https://gigit.onrender.com/api/users/${id}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -72,7 +74,12 @@ const NavbarLayout = () => {
                   >
                     {developer.first_name} Profile
                   </Link>
-                  <button onClick={handleLogout} className="text-sm sm:text-base">Logout</button>
+                  <button
+                    onClick={handleLogout}
+                    className="text-sm sm:text-base"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -90,7 +97,7 @@ const NavbarLayout = () => {
             <FaUser className="h-5 w-5 sm:h-6 sm:w-6" />
           </Link>
         </div>
-      </div> 
+      </div>
     </nav>
   );
 };

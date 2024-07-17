@@ -30,7 +30,7 @@ const ForgotPassword: React.FC = () => {
 
       setTimeout(() => {
         navigate(`/reset-password/:token`);
-      }, 1500); 
+      }, 1500);
     } catch (error) {
       console.error("Error during password reset:", error);
 
@@ -45,13 +45,16 @@ const ForgotPassword: React.FC = () => {
   const sendResetEmail = async (email: string) => {
     console.log("Sending password reset email to:", email);
 
-    const response = await fetch(`http://localhost:5000/api/auth/forgot-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    const response = await fetch(
+      `https://gigit.onrender.com/api/auth/forgot-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to send reset link");

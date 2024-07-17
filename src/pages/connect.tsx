@@ -24,7 +24,7 @@ const Connect: React.FC = () => {
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/`);
+        const response = await fetch(`https://gigit.onrender.com/api/users/`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -74,11 +74,15 @@ const Connect: React.FC = () => {
         </button>
         <div className="flex items-center space-x-4">
           <IoMdGrid
-            className={`text-gray-600 cursor-pointer ${viewMode === "grid" && "text-blue-500"}`}
+            className={`text-gray-600 cursor-pointer ${
+              viewMode === "grid" && "text-blue-500"
+            }`}
             onClick={toggleViewMode}
           />
           <IoMdList
-            className={`text-gray-600 cursor-pointer ${viewMode === "list" && "text-blue-500"}`}
+            className={`text-gray-600 cursor-pointer ${
+              viewMode === "list" && "text-blue-500"
+            }`}
             onClick={toggleViewMode}
           />
         </div>
@@ -121,7 +125,13 @@ const Connect: React.FC = () => {
             />
           </div>
 
-          <div className={`${viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-4"}`}>
+          <div
+            className={`${
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                : "space-y-4"
+            }`}
+          >
             {filteredDevelopers.length > 0 ? (
               filteredDevelopers.slice(-8).map((developer) => (
                 <div
@@ -140,9 +150,7 @@ const Connect: React.FC = () => {
                     <strong className="mr-2">Rate:</strong>
                     <span>${developer.rate}/hour</span>
                   </div>
-                  <p className="text-sm mb-2">
-                    {developer.bio}
-                  </p>
+                  <p className="text-sm mb-2">{developer.bio}</p>
                   <Link
                     to={`/profile/${developer._id}`}
                     className="inline-flex items-center bg-blue-500 text-white text-xs px-2 py-1 rounded-lg"

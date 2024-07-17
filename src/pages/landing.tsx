@@ -23,7 +23,7 @@ const Landing = () => {
   const fetchSpecializations = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/specialization/specializations`
+        `https://gigit.onrender.com/api/users/specialization/specializations`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -37,7 +37,7 @@ const Landing = () => {
 
   const fetchDevelopers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/users/");
+      const response = await fetch("https://gigit.onrender.com/api/users/");
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -72,7 +72,7 @@ const Landing = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ( e.key === "Enter" ) {
+    if (e.key === "Enter") {
       const searchTermRegex = new RegExp(query, "i");
       const filtered = developers.filter(
         (developer) =>
