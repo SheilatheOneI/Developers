@@ -7,6 +7,7 @@ const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,6 +19,8 @@ const ForgotPassword: React.FC = () => {
       setError(null);
     }
 
+    setLoading(true);
+
     try {
       await sendResetEmail(email);
 
@@ -26,14 +29,16 @@ const ForgotPassword: React.FC = () => {
       });
 
       setTimeout(() => {
-        navigate("/resett/:token");
-      }, 3000); // 3 seconds delay
+        navigate(`/reset-password/:token`);
+      }, 1500);
     } catch (error) {
       console.error("Error during password reset:", error);
 
       toast.error("Failed to send reset link. Please try again later.", {
         position: "top-right",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,7 +94,7 @@ const ForgotPassword: React.FC = () => {
             type="submit"
             className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm"
           >
-            Send Link
+            {loading ? "Loading..." : "Send Link"}
           </button>
         </form>
         <p className="text-center mt-4 text-sm text-gray-500">
