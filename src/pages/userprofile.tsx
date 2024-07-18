@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PhoneInput, { Value } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { H6, Subtitle, Subtitle2 } from "../components/typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAuthCtx from "../context/auth-context";
 import {
   faEnvelope,
   faPhone,
@@ -37,33 +38,13 @@ const defaultDeveloper: Developer = {
 };
 
 const Profile: React.FC = () => {
-  const [developer, setDeveloper] = useState<Developer | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formValues, setFormValues] = useState<Developer>(defaultDeveloper);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { updateProfile, deleteProfile, user } = useAuthCtx();
 
-  useEffect(() => {
-    const fetchDeveloper = async () => {
-      try {
-        const response = await fetch(
-          `https://gigit.onrender.com/api/users/${id}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        const fullData = { ...defaultDeveloper, ...data };
-        setDeveloper(fullData);
-        setFormValues(fullData);
-      } catch (error) {
-        console.error("Error fetching developer data:", error);
-      }
-    };
 
-    fetchDeveloper();
-  }, [id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -77,31 +58,11 @@ const Profile: React.FC = () => {
 
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = localStorage.getItem("jwtToken");
 
     console.log("Form Values being sent:", formValues);
 
     try {
-      const response = await fetch(
-        `https://gigit.onrender.com/api/freelancer/update`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formValues),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const updatedDeveloper = await response.json();
-
-      console.log("Updated Developer Data:", updatedDeveloper);
-
-      setDeveloper(updatedDeveloper);
+      await updateProfile(formValues);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating developer data:", error);
@@ -109,32 +70,15 @@ const Profile: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem("jwtToken");
 
     try {
-      const response = await fetch(
-        `https://gigit.onrender.com/api/freelancer/delete/${id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      await deleteProfile(user?._id as string);
       navigate("/");
     } catch (error) {
       console.error("Error deleting developer profile:", error);
     }
   };
 
-  if (!developer) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <section className="min-h-screen bg-gray-100">
@@ -150,14 +94,14 @@ const Profile: React.FC = () => {
           <div className="md:w-2/3 space-y-4">
             <div className="bg-white p-6 rounded-lg shadow">
               <H6 className="text-red-200 mb-2 text-sm">
-                Type: {developer.jobType}
+                Type: {user?.jobType}
               </H6>
               <Subtitle className="font-bold text-sm mb-2">
-                {developer.specialization}
+                {user?.specialization}
               </Subtitle>
               <Subtitle2 className="text-red-600 text-sm">
                 <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                {developer.location}
+                {user?.location}
               </Subtitle2>
             </div>
 
@@ -165,9 +109,9 @@ const Profile: React.FC = () => {
               <h2 className="font-bold text-sm mb-4 text-blue-400">
                 Freelancer Bio
               </h2>
-              <p className="text-gray-700 mb-4 ">{developer.bio}</p>
+              <p className="text-gray-700 mb-4 ">{user?.bio}</p>
               <h3 className="font-bold text-xs mb-2">Rate</h3>
-              <p className="text-red-600 text-xs">${developer.rate} USD/hr</p>
+              <p className="text-red-600 text-xs">${user?.rate} USD/hr</p>
             </div>
           </div>
 
@@ -175,18 +119,18 @@ const Profile: React.FC = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <h2 className="font-bold text-xs mb-4">Freelancer Info</h2>
               <h3 className="font-bold text-xs mb-2">
-                {developer.first_name} {developer.last_name}
+                {user?.first_name} {user?.last_name}
               </h3>
               <h4 className="font-bold text-xs mb-2 text-blue-400">
                 Contact Information
               </h4>
               <p className="text-gray-700 text-xs">
                 <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-                {developer.email}
+                {user?.email}
               </p>
               <p className="text-gray-700 text-xs">
                 <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                {developer.phone_number}
+                {user?.phone_number}
               </p>
             </div>
 

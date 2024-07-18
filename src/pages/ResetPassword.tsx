@@ -4,7 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword: React.FC = () => {
-  const { token } = useParams<{ token: string }>();
+  const { resetToken } = useParams<{ resetToken: string }>();
+  const token = resetToken;
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +33,7 @@ const ResetPassword: React.FC = () => {
       });
 
       setTimeout(() => {
-        navigate("/login");
+        navigate("/auth/login");
       }, 2000);
     } catch (error) {
       console.error("Error during password reset:", error);
@@ -65,7 +66,7 @@ const ResetPassword: React.FC = () => {
       <ToastContainer className="toast-container" />
       <button
         className="absolute top-16 left-12 text-[#1C5D99] hover:underline"
-        onClick={() => navigate("/login")}
+        onClick={() => navigate("/auth/login")}
       >
         &larr; Back
       </button>

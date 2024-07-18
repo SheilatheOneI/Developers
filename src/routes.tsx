@@ -1,13 +1,14 @@
 import { useRoutes } from "react-router-dom";
 import Signup from "./pages/signup";
 import Connect from "./pages/connect";
-import Profile from "./pages/userprofile";
+import UserProfile from "./pages/userprofile";
 import Login from "./pages/login";
-import UserProfile from "./pages/profile";
+import Profile from "./pages/profile";
 import Landing from "./pages/landing";
 import PageLayout from "./layout/pages";
 import Admin from "./pages/admin";
 import ForgotPassword from "./pages/Forgot";
+import AuthGuard from "./context/authGuard";
 // import ResetPassword from "./pages/resett";
 import ResetPassword from "./pages/ResetPassword";
 
@@ -22,19 +23,23 @@ const Router = () => {
           element: <Landing />,
         },
         {
-          path: "userprofile/:id",
-          element: <Profile />,
+          path: "userprofile",
+          element: (
+            <AuthGuard>
+          <UserProfile />
+          </AuthGuard>
+        ),
         },
         {
-          path: "signup",
+          path: "auth/signup",
           element: <Signup />,
         },
         {
-          path: "/forgot-password",
+          path: "auth/forgot-password",
           element: <ForgotPassword />,
         },
         {
-          path: "/reset-password/:resetToken",
+          path: "auth/reset-password/:resetToken",
           element: <ResetPassword />,
         },
 
@@ -44,10 +49,10 @@ const Router = () => {
         },
         {
           path: "profile/:id",
-          element: <UserProfile />,
+          element: <Profile />,
         },
         {
-          path: "login",
+          path: "auth/login",
           element: <Login />,
         },
         { path: "admin", element: <Admin /> },

@@ -1,16 +1,16 @@
 // App.tsx
-import { AuthProvider } from "./context/AuthContext";
+import { AuthCtxProvider } from "./context/auth-context";
 import Providers from "./provider";
 import Router from "./routes";
 
 
 const App = () => {
   return (
-    <AuthProvider> 
+    <AuthCtxProvider> 
       <Providers>
         <Router />
       </Providers>
-    </AuthProvider>
+    </AuthCtxProvider>
   );
 };
 

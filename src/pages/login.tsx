@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { Button, Link } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import useAuthCtx from "../context/auth-context";
 import { H1 } from "../components/typography";
 
 type formValues = {
@@ -21,43 +21,15 @@ const Login = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuthCtx();
 
-  const loginUser = async (data: formValues) => {
-    try {
-      const response = await fetch(
-        `https://gigit.onrender.com/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const result = await response.json();
-      localStorage.setItem("jwtToken", result.user.token);
-
-      console.log(result.user._id);
-
-      login(); // Ensure login() is called correctly
-      navigate(`/userprofile/${result.user._id}`);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const onSubmit = (data: formValues) => {
-    loginUser(data);
+  const onSubmit = async (data: formValues) => {
+    await login(data);
+    navigate(`/userprofile/`);
   };
 
   const handleForgotPassword = () => {
-    navigate("/forgot-password");
+    navigate("/auth/forgot-password");
   };
 
   return (
@@ -108,7 +80,7 @@ const Login = () => {
             <div className="flex justify-center">
               <span className="text-sm">Forgot Password? </span>
               <Link
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 className="text-sm text-lapis cursor-pointer"
                 onClick={handleForgotPassword}
               >
@@ -126,7 +98,7 @@ const Login = () => {
           </form>
           <div className="mt-2 text-center mb-1">
             <span className="text-sm"> Don't have an account?</span>
-            <Link href="/signup">
+            <Link href="/auth/signup">
               <span className="text-[#BBCDE5] hover:underline">Sign up</span>
             </Link>
           </div>

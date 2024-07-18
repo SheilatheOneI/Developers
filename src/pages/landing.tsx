@@ -37,7 +37,7 @@ const Landing = () => {
 
   const fetchDevelopers = async () => {
     try {
-      const response = await fetch("https://gigit.onrender.com/api/users/");
+      const response = await fetch(`https://gigit.onrender.com/api/users/`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
