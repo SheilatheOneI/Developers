@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { H1 } from "../components/typography";
+import useAuthCtx from "../context/auth-context";
+import { SignUpData } from "../types/auth";
 
 const Signup: React.FC = () => {
+  const { signUp } = useAuthCtx();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -24,35 +27,17 @@ const Signup: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
-    const formatedData = {
+    const formatedData: SignUpData = {
       ...formData,
-      user_type: "individual",
       user_data: [
         { first_name: formData.firstName, last_name: formData.lastName },
       ],
+      
     };
 
     try {
-      const response = await fetch(
-        `https://gigit.onrender.com/api/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formatedData),
-        }
-      );
-      console.log(response.status);
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(`Signup failed ${data.message || data}`);
-      }
-      const userId = data.id;
-
-      navigate(`/userprofile/${userId}`);
+      await signUp(formatedData);
+      navigate(`/userprofile/`);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -60,23 +45,11 @@ const Signup: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-w flex flex-col items-center justify-center p-8 relative">
-      {/* <button
-        className="absolute top-4 left-4 text-[#1C5D99] hover:underline"
-        onClick={() => navigate("/")}
-      >
-        &larr; Back
-      </button> */}
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-6 border-2 border-grey"
       >
-        {/* <img
-          src="src/images/logo2.jpg"
-          alt="Logo"
-          className="h-16 w-16 mx-auto mb-4 rounded-full"
-        /> */}
         <H1 className="mb-2 text-4xl font text-center">DevConnect</H1>
-
         <h1 className="text-xl text-center mb-6">Sign up to get started</h1>
         <div className="flex flex-col gap-3">
           <div className="flex gap-2">
