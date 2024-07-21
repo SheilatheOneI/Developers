@@ -1,46 +1,37 @@
 import useAuthCtx from "./auth-context";
 import { PropsWithChildren, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import Preloader from "../components/preloader";
 
 const AuthGuard = ({ children }: PropsWithChildren) => {
-	const { isAuthenticated, user } = useAuthCtx();
-	const { pathname } = useLocation();
+  const { isAuthenticated, isInitialized } = useAuthCtx();
+  const { pathname } = useLocation();
 
-	const [requestedLocation, setRequestedLocation] = useState<string | null>(
-		null
-	);
+  const [requestedLocation, setRequestedLocation] = useState<string | null>(
+    null
+  );
 
-	if (!isAuthenticated) {
-		let redirectTo: string = "";
-		if (!pathname.includes("/auth")) {
-			redirectTo = pathname;
-		}
+  if (!isInitialized) return <Preloader />;
 
-		return (
-			<Navigate
-				to={
-					redirectTo
-						? `/auth/login?redirect=${redirectTo}`
-						: "/auth/login"
-				}
-			/>
-		);
-	}
+  if (!isAuthenticated) {
+    let redirectTo: string = "";
+    if (!pathname.includes("/auth")) {
+      redirectTo = pathname;
+    }
 
-	if (
-		isAuthenticated &&
-		!pathname.includes("/verify-email") &&
-		user?.verified === false
-	) {
-		return <Navigate to="/auth/verify-email" />;
-	}
+    return (
+      <Navigate
+        to={redirectTo ? `/auth/login?redirect=${redirectTo}` : "/auth/login"}
+      />
+    );
+  }
 
-	if (requestedLocation && pathname !== requestedLocation) {
-		setRequestedLocation(null);
-		return <Navigate to={requestedLocation} />;
-	}
+  if (requestedLocation && pathname !== requestedLocation) {
+    setRequestedLocation(null);
+    return <Navigate to={requestedLocation} />;
+  }
 
-	return children;
+  return children;
 };
 
 export default AuthGuard;
