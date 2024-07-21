@@ -1,14 +1,33 @@
+/* eslint-disable no-useless-catch */
+import secureLocalStorage from "react-secure-storage";
+
 const useLocalStorage = () => {
   const storeItem = async (key: string, value: string) => {
-    await window.localStorage.setItem(key, value);
+    try {
+      await secureLocalStorage.setItem(key, value);
+    } catch (e) {
+      throw e;
+    }
   };
+
   const retrieveItem = async (key: string) => {
-    const value = await window.localStorage.getItem(key);
-    return value;
+    try {
+      const value = await secureLocalStorage.getItem(key);
+      return value;
+    } catch (e) {
+      throw e;
+    }
   };
+
   const deleteItem = async (key: string) => {
-    await window.localStorage.removeItem(key);
+    try {
+      await secureLocalStorage.removeItem(key);
+    } catch (e) {
+      throw e;
+    }
   };
+
   return { storeItem, retrieveItem, deleteItem };
 };
+
 export default useLocalStorage;

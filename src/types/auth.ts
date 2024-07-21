@@ -1,17 +1,18 @@
 export type AuthState = {
   user: null | User;
   isAuthenticated: boolean;
+  isInitialized: boolean;
 };
 
 export type AuthCtx = {
   user: User | null;
   isAuthenticated: boolean;
+  isInitialized: boolean;
   login: (data: LoginData) => void;
   logout: () => void;
   signUp: (data: SignUpData) => void;
   updateProfile: (data: Partial<Developer>) => void;
   deleteProfile: (userId: string) => void;
-  verifyEmail: (token: string) => void;
 };
 
 export interface User {
@@ -37,14 +38,20 @@ export interface SignUpData {
   email: string;
   password: string;
   agreeTerms: boolean;
-  user_data: {
-    first_name: string;
-    last_name: string;
-  }[];
+  first_name: string;
+  last_name: string;
+  // user_data: {
+  //   first_name: string;
+  //   last_name: string;
+  // }[];
 }
 
 export type AuthActions =
   | {
+      type: AuthActionsTypes.INITIAL;
+      payload: boolean;
+    }
+    | {
       type: AuthActionsTypes.LOGIN;
       payload: User;
     }
@@ -67,6 +74,7 @@ export type AuthActions =
 
 export enum AuthActionsTypes {
   LOGIN = "LOGIN",
+  INITIAL = "INITIAL",
   LOGOUT = "LOGOUT",
   SIGNUP = "SIGNUP",
   UPDATEPROFILE = "UPDATEPROFILE",

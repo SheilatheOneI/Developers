@@ -1,210 +1,237 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-useless-catch */
-
+import { isExpired } from "react-jwt";
 
 import axiosFunc from "../utils/axios";
 import {
-	ReactNode,
-	createContext,
-	useCallback,
-	useContext,
-	useMemo,
-	useReducer,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
 } from "react";
 import {
-	AuthState,
-	AuthActions,
-	AuthActionsTypes,
-	LoginData,
-	SignUpData,
-	AuthCtx,
-    // User,
-	Developer
+  AuthState,
+  AuthActions,
+  AuthActionsTypes,
+  LoginData,
+  SignUpData,
+  AuthCtx,
+  User,
+  Developer,
 } from "../types/auth";
 import useLocalStorage from "../hooks/use-localStorage";
 
 const AuthContext = createContext<AuthCtx | null>(null);
 
 const authReducer = (state: AuthState, action: AuthActions) => {
-	const { payload, type } = action;
+  const { payload, type } = action;
 
-	if (type === AuthActionsTypes.LOGIN) {
-		return { ...state, user: payload, isAuthenticated: true };
-	}
+  if (type === AuthActionsTypes.INITIAL) {
+    return { ...state, isInitialized: true };
+  }
 
-	if (type === AuthActionsTypes.SIGNUP) {
-		return { ...state, isAuthenticated: true, user: payload };
-	}
+  if (type === AuthActionsTypes.LOGIN) {
+    return { ...state, user: payload, isAuthenticated: true };
+  }
 
-	if (type === AuthActionsTypes.LOGOUT) {
-		return { ...state, isAuthenticated: false, user: null };
-	}
+  if (type === AuthActionsTypes.SIGNUP) {
+    return { ...state, isAuthenticated: true, user: payload };
+  }
 
-	if (type === AuthActionsTypes.UPDATEPROFILE) {
-		if (!state.user) {
-			return state;
-		}
+  if (type === AuthActionsTypes.LOGOUT) {
+    return { ...state, isAuthenticated: false, user: null };
+  }
 
-		return { ...state, user: { ...state.user, ...payload } };
-	}
-	if (type === AuthActionsTypes.DELETEPROFILE) {
-		if (!state.user) {
-			return state;
-		}
+  if (type === AuthActionsTypes.UPDATEPROFILE) {
+    if (!state.user) {
+      return state;
+    }
 
-		return { ...state, isAuthenticated: true, user: null };
-	}
+    return { ...state, user: { ...state.user, ...payload } };
+  }
+  if (type === AuthActionsTypes.DELETEPROFILE) {
+    if (!state.user) {
+      return state;
+    }
 
-	return state;
+    return { ...state, isAuthenticated: true, user: null };
+  }
+
+  return state;
 };
 
 const defaultAuthState: AuthState = {
-	user: null,
-	isAuthenticated: false,
+  user: null,
+  isAuthenticated: false,
+  isInitialized: false,
 };
 
 export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
-	const [authState, dispatch] = useReducer(authReducer, defaultAuthState);
+  const [authState, dispatch] = useReducer(authReducer, defaultAuthState);
 
-	const { storeItem, deleteItem } = useLocalStorage();
+  const { storeItem, deleteItem, retrieveItem } = useLocalStorage();
 
-	const login = useCallback(async (credentials: LoginData) => {
-		try {
-			const {data} = await axiosFunc.post("/api/auth/login", credentials);
+  const retrieveProfileData = useCallback(async (shouldUpdate?: boolean) => {
+    try {
+      const response = await axiosFunc.get(`/api/auth/profile`);
+      const user = response.data.user as User;
+      if (shouldUpdate) {
+        await updateProfile(user);
+      }
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }, []);
 
-			axiosFunc.defaults.headers.common.Authorization = `Bearer ${data.user.token}`;
+  const initializeAuthCtx = useCallback(async () => {
+    try {
+      const accessToken = (await retrieveItem("jwtToken")) as string;
+      if (accessToken) {
+        const tokenExpired = isExpired(accessToken);
 
-			await storeItem("jwtToken", data.token);
-			const userData = data.user
+        if (tokenExpired) return;
+        axiosFunc.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        const user = await retrieveProfileData();
 
-			dispatch({
-				type: AuthActionsTypes.LOGIN,
-				payload: userData,
-			});
-		} catch (err) {
-			throw err;
-		}
-	}, []);
+        if (!user) {
+          throw new Error("Something went wrong");
+        }
 
-	const signUp = useCallback(async (data: SignUpData) => {
-		try {
-			const response = await axiosFunc.post("/api/auth/register", data);
+        dispatch({
+          type: AuthActionsTypes.LOGIN,
+          payload: user,
+        });
+      }
+    } catch (err) {
+      throw err;
+    } finally {
+      dispatch({
+        type: AuthActionsTypes.INITIAL,
+        payload: true,
+      });
+    }
+  }, []);
 
-			const { user, accessToken } = response.data;
+  const login = useCallback(async (credentials: LoginData) => {
+    try {
+      const { data } = await axiosFunc.post("/api/auth/login", credentials);
 
-			await storeItem("token", accessToken);
-			axiosFunc.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      axiosFunc.defaults.headers.common.Authorization = `Bearer ${data.user.token}`;
 
-			dispatch({
-				type: AuthActionsTypes.SIGNUP,
-				payload: user,
-			});
-		} catch (err) {
-			throw err;
-		}
-	}, []);
+      await storeItem("jwtToken", data.token);
+      const userData = data.user;
 
-	const updateProfile = useCallback(async (userProfile: Partial<Developer>) => {
-		try {
-			const {data} = await axiosFunc.put("/api/freelancer/update", userProfile);
+      dispatch({
+        type: AuthActionsTypes.LOGIN,
+        payload: userData,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }, []);
 
-			const { user } = data;
+  const signUp = useCallback(async (data: SignUpData) => {
+    try {
+      const response = await axiosFunc.post("/api/auth/register", data);
 
-			
-		dispatch({
-			type: AuthActionsTypes.UPDATEPROFILE,
-			payload: user,
-		});
-		} catch (err) {
-			throw err;
-		}
-		
-	}, []);
+      const { user, accessToken } = response.data;
 
-	const deleteProfile = useCallback(async (userId: string) => {
-		try {
-			await axiosFunc.delete(`/api/freelancer/delete/${userId}`);
+      await storeItem("jwtToken", accessToken);
+      axiosFunc.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-			
-		dispatch({
-			type: AuthActionsTypes.DELETEPROFILE,
-			payload: null,
-		});
-		} catch (err) {
-			throw err;
-		}
-		
-	}, []);
+      dispatch({
+        type: AuthActionsTypes.SIGNUP,
+        payload: user,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }, []);
 
+  const updateProfile = useCallback(async (userProfile: Partial<Developer>) => {
+    try {
+      const response = await axiosFunc.put(
+        "https://gigit.onrender.com/api/freelancer/update",
+        userProfile
+      );
 
-	const logout = useCallback(async () => {
-		await deleteItem("token");
-		dispatch({
-			type: AuthActionsTypes.LOGOUT,
-			payload: null,
-		});
-	}, []);
+      const { user } = response.data;
 
-	const verifyEmail = useCallback(
-		async (token: string) => {
-			try {
-				axiosFunc.defaults.headers.common.Authorization = `Bearer ${token}`;
+      dispatch({
+        type: AuthActionsTypes.UPDATEPROFILE,
+        payload: user,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }, []);
 
-				await axiosFunc.get("/api/auth/verify-email");
-				await storeItem("token", token);
+  const deleteProfile = useCallback(async (userId: string) => {
+    try {
+      await axiosFunc.post(`/api/freelancer/delete/${userId}`);
 
-				const response = await axiosFunc.get("/api/auth/profile");
-				const user = response.data.user;
-				dispatch({
-					type: AuthActionsTypes.LOGIN,
-					payload: user,
-				});
-			} catch (err) {
-				throw err;
-			}
-		},
+      dispatch({
+        type: AuthActionsTypes.DELETEPROFILE,
+        payload: null,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }, []);
 
-		[]
-	);
+  const logout = useCallback(async () => {
+    await deleteItem("jwtToken");
+    dispatch({
+      type: AuthActionsTypes.LOGOUT,
+      payload: null,
+    });
+  }, []);
 
-	const authCtxValue = useMemo(
-		() => ({
-			user: authState.user,
-			isAuthenticated: authState.isAuthenticated,
-			login,
-			signUp,
-			updateProfile,
-			deleteProfile,
-			logout,
-			verifyEmail,
-		}),
-		[
-			authState,
-			login,
-			signUp,
-			updateProfile,
-			deleteProfile,
-			logout,
-			verifyEmail,
-		]
-	);
+  useEffect(() => {
+    initializeAuthCtx();
+  }, [initializeAuthCtx]);
 
-	return (
-		<AuthContext.Provider value={authCtxValue}>
-			{children}
-		</AuthContext.Provider>
-	);
+  const authCtxValue = useMemo(
+    () => ({
+      user: authState.user,
+      isAuthenticated: authState.isAuthenticated,
+      isInitialized: authState.isInitialized,
+      initializeAuthCtx,
+      login,
+      signUp,
+      updateProfile,
+      deleteProfile,
+      logout,
+    }),
+    [
+      authState,
+      initializeAuthCtx,
+      login,
+      signUp,
+      updateProfile,
+      deleteProfile,
+      logout,
+    ]
+  );
+
+  return (
+    <AuthContext.Provider value={authCtxValue}>{children}</AuthContext.Provider>
+  );
 };
 
 const useAuthCtx = () => {
-	const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
-	if (!authCtx) {
-		throw new Error("useAuthCtx should be used inside AuthCtxProvider");
-	}
+  if (!authCtx) {
+    throw new Error("useAuthCtx should be used inside AuthCtxProvider");
+  }
 
-	return authCtx;
+  return authCtx;
 };
 
 export default useAuthCtx;
