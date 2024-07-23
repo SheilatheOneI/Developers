@@ -19,7 +19,7 @@ const AuthGuard = ({ children }: PropsWithChildren) => {
       redirectTo = pathname;
     }
 
-    return (
+    return ( 
       <Navigate
         to={redirectTo ? `/auth/login?redirect=${redirectTo}` : "/auth/login"}
       />

@@ -9,6 +9,9 @@ import {
   faEnvelope,
   faPhone,
   faMapMarkerAlt,
+  faBriefcase,
+  faDollarSign,
+  faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface Developer {
@@ -44,8 +47,6 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { updateProfile, deleteProfile, user } = useAuthCtx();
 
-
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -58,9 +59,6 @@ const Profile: React.FC = () => {
 
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log("Form Values being sent:", formValues);
-
     try {
       await updateProfile(formValues);
       setIsEditing(false);
@@ -70,7 +68,6 @@ const Profile: React.FC = () => {
   };
 
   const handleDelete = async () => {
-
     try {
       await deleteProfile(user?._id as string);
       navigate("/");
@@ -79,75 +76,85 @@ const Profile: React.FC = () => {
     }
   };
 
-
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="container mx-auto p-4">
         <button
-          className="text-blue-500 hover:underline mb-4"
+          className="text-blue-500 hover:underline mb-4 flex items-center"
           onClick={() => navigate("/")}
         >
-          &larr; Back
+          <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
+          Back to Home
         </button>
 
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="md:w-2/3 space-y-4">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <H6 className="text-red-200 mb-2 text-sm">
-                Type: {user?.jobType}
-              </H6>
-              <Subtitle className="font-bold text-sm mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="flex items-center justify-between mb-4">
+                <H6 className="text-blue-600 font-semibold">
+                  {user?.jobType}
+                </H6>
+                <Subtitle2 className="text-gray-600">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
+                  {user?.location}
+                </Subtitle2>
+              </div>
+              <Subtitle className="font-bold text-xl mb-2">
                 {user?.specialization}
               </Subtitle>
-              <Subtitle2 className="text-red-600 text-sm">
-                <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                {user?.location}
-              </Subtitle2>
+              <div className="flex items-center text-green-600">
+                <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                <span className="font-semibold">${user?.rate}</span> USD/hr
+              </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="font-bold text-sm mb-4 text-blue-400">
-                Freelancer Bio
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="font-bold text-lg mb-4 text-blue-600">
+                About Me
               </h2>
-              <p className="text-gray-700 mb-4 ">{user?.bio}</p>
-              <h3 className="font-bold text-xs mb-2">Rate</h3>
-              <p className="text-red-600 text-xs">${user?.rate} USD/hr</p>
+              <p className="text-gray-700 leading-relaxed">{user?.bio}</p>
             </div>
           </div>
 
-          <div className="md:w-1/3 space-y-4">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="font-bold text-xs mb-4">Freelancer Info</h2>
-              <h3 className="font-bold text-xs mb-2">
-                {user?.first_name} {user?.last_name}
-              </h3>
-              <h4 className="font-bold text-xs mb-2 text-blue-400">
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="font-bold text-lg mb-4 text-blue-600">
                 Contact Information
-              </h4>
-              <p className="text-gray-700 text-xs">
-                <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-                {user?.email}
-              </p>
-              <p className="text-gray-700 text-xs">
-                <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                {user?.phone_number}
-              </p>
+              </h2>
+              <div className="space-y-3">
+                <p className="flex items-center text-gray-700">
+                  <FontAwesomeIcon icon={faEnvelope} className="mr-3 text-blue-500" />
+                  {user?.email}
+                </p>
+                <p className="flex items-center text-gray-700">
+                  <FontAwesomeIcon icon={faPhone} className="mr-3 text-blue-500" />
+                  {user?.phone_number}
+                </p>
+                <p className="flex items-center text-gray-700">
+                  <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                  {user?.jobType}
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="font-bold text-xs mb-4">Manage Profile</h2>
-              <button
-                onClick={() => setIsEditing(true)}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded mb-2"
-              >
-                Edit Profile
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="w-full bg-red-500 text-white py-2 px-4 rounded"
-              >
-                Delete Profile
-              </button>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="font-bold text-lg mb-4 text-blue-600">
+                Manage Profile
+              </h2>
+              <div className="space-y-3">
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+                >
+                  Edit Profile
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300"
+                >
+                  Delete Profile
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -216,14 +223,14 @@ const Profile: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
+                  className="bg-blue-500 text-white py-2 px-4 rounded w-full sm:w-1/2 hover:bg-blue-600 transition duration-300"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white py-2 px-4 rounded w-full sm:w-1/2"
+                  className="bg-gray-500 text-white py-2 px-4 rounded w-full sm:w-1/2 hover:bg-gray-600 transition duration-300"
                 >
                   Cancel
                 </button>
@@ -241,13 +248,13 @@ const Profile: React.FC = () => {
             <div className="flex gap-4 mt-4">
               <button
                 onClick={handleDelete}
-                className="bg-red-500 text-white py-2 px-4 rounded w-full"
+                className="bg-red-500 text-white py-2 px-4 rounded w-full hover:bg-red-600 transition duration-300"
               >
                 Delete
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="bg-gray-500 text-white py-2 px-4 rounded w-full"
+                className="bg-gray-500 text-white py-2 px-4 rounded w-full hover:bg-gray-600 transition duration-300"
               >
                 Cancel
               </button>

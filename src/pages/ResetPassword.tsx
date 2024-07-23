@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 const ResetPassword: React.FC = () => {
   const { resetToken } = useParams<{ resetToken: string }>();
@@ -9,12 +10,18 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!password) {
       setError("Password is required");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
       return;
     }
 
@@ -62,37 +69,45 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-w p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-w p-4 sm:p-6 md:p-8">
       <ToastContainer className="toast-container" />
-      <button
-        className="absolute top-16 left-12 text-[#1C5D99] hover:underline"
-        onClick={() => navigate("/auth/login")}
-      >
-        &larr; Back
-      </button>
-      <div className="bg-white shadow-md rounded-2xl p-8 max-w-sm w-full">
-        <h1 className="text-3xl font-semibold text-center mb-1">DevConnect</h1>
-        <p className="text-lg text-center mb-2 font-medium text-gray-600">
+      
+      <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px]">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-1">Gigit</h1>
+        <p className="text-base sm:text-lg text-center mb-2 font-medium text-gray-600">
           Reset Your Password
         </p>
-        <p className="text-center mb-6 text-sm text-gray-500">
+        <p className="text-center mb-6 text-xs sm:text-sm text-gray-500">
           Enter your new password below.
         </p>
         <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError(null);
-            }}
-            placeholder="New Password"
-            className="w-full p-3 mb-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#1C5D99] text-sm"
-          />
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <div className="relative mb-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(null);
+              }}
+              placeholder="New Password"
+              className="w-full p-2 sm:p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#F13223] text-sm sm:text-base pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+              )}
+            </button>
+          </div>
+          {error && <p className="text-red-500 text-xs sm:text-sm mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm"
+            className="w-full bg-[#F13223] text-white py-2 sm:py-3 rounded-full hover:bg-[#e28983] transition-colors text-sm sm:text-base"
           >
             Reset Password
           </button>
@@ -101,11 +116,16 @@ const ResetPassword: React.FC = () => {
       <style>{`
         .toast-container {
           width: 100%;
-          max-width: 400px;
+          max-width: 320px;
         }
-        @media (max-width: 768px) {
+        @media (min-width: 640px) {
           .toast-container {
-            max-width: 80%;
+            max-width: 380px;
+          }
+        }
+        @media (min-width: 768px) {
+          .toast-container {
+            max-width: 440px;
           }
         }
       `}</style>

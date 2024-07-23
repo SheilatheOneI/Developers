@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { H1 } from "../components/typography";
 import useAuthCtx from "../context/auth-context";
 import { SignUpData } from "../types/auth";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 const Signup: React.FC = () => {
   const { signUp } = useAuthCtx();
@@ -24,6 +25,10 @@ const Signup: React.FC = () => {
     confirmPassword: '',
     agreeTerms: ''
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signupError, setSignupError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -59,9 +64,15 @@ const Signup: React.FC = () => {
     if (!formData.password) {
       newErrors.password = 'Password is required';
       isValid = false;
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters long';
+      isValid = false;
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Confirm password is required';
+      isValid = false;
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
       isValid = false;
     }
     if (!formData.agreeTerms) {
@@ -89,6 +100,7 @@ const Signup: React.FC = () => {
         navigate(`/userprofile/`);
       } catch (error) {
         console.error("Error during signup:", error);
+        setSignupError('Signup failed. Please check your email and try again.');
       }
     }
   };
@@ -99,8 +111,9 @@ const Signup: React.FC = () => {
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-lg p-10 max-w-md w-full mt-6 border-2 border-grey"
       >
-        <H1 className="mb-2 text-4xl font text-center">DevConnect</H1>
+        <H1 className="mb-2 text-4xl font text-center">Gigit</H1>
         <h1 className="text-xl text-center mb-6">Sign up to get started</h1>
+        {signupError && <p className="text-red-500 text-sm mb-4 text-center">{signupError}</p>}
         <div className="flex flex-col gap-3">
           <div className="flex gap-2">
             <div className="w-1/2">
@@ -137,26 +150,48 @@ const Signup: React.FC = () => {
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Create your Password"
               className={`w-full px-4 py-2 border rounded-full ${errors.password ? 'border-red-500' : ''}`}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-5 w-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="h-5 w-5 text-gray-400" />
+              )}
+            </button>
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
               className={`w-full px-4 py-2 border rounded-full ${errors.confirmPassword ? 'border-red-500' : ''}`}
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              {showConfirmPassword ? (
+                <EyeSlashIcon className="h-5 w-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="h-5 w-5 text-gray-400" />
+              )}
+            </button>
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
@@ -171,7 +206,7 @@ const Signup: React.FC = () => {
           />
           <label htmlFor="terms" className="text-sm">
             I agree to the{" "}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="/termsandconditions" className="text-blue-500 hover:underline">
               terms and conditions
             </a>
           </label>
@@ -179,7 +214,7 @@ const Signup: React.FC = () => {
         {errors.agreeTerms && <p className="text-red-500 text-xs mt-1">{errors.agreeTerms}</p>}
         <button
           type="submit"
-          className="w-full bg-[#1C5D99] text-white py-2 rounded-full hover:bg-[#164973] transition-colors mt-4"
+          className="w-full bg-[#F13223] text-white py-2 rounded-full hover:bg-[#f0b4af] transition-colors mt-4"
         >
           Sign Up
         </button>

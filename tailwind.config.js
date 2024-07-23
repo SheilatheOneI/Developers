@@ -6,18 +6,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "blue-700": "#1C5D99",
-        "blue-500": "#639FAB",
-        "blue-300": "#BBCDE5",
-        "blue-200": "#65318E",
-        "blue-100": "#FFC300",
-        "yellow-500": "#FFD700",
-        moonstone: "#639fab",
-        lapis: "#1c5d99",
-        powder: "#bbcde5",
+        "blue-700": "#F13223",
+        "blue-500": "#F13223",
+        "blue-300": "#F13223",
+        "blue-200": "#F13223",
+        "blue-100": "#F13223",
+        "yellow-500": "#F13223",
+        moonstone: "#F13223",
+        lapis: "#F13223",
+        powder: "#F13223",
       },
       fontFamily: {
-        sans: ['Roboto', 'sans-serif'],
+        sans: ['Space Mono', 'sans-serif'],
       },
       // backgroundImage: {
       //   landing: "url('src/images/landing2.png')",
@@ -27,6 +27,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-
   plugins: [nextui()],
 };

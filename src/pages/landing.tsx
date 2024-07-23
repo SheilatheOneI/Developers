@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Link } from "@nextui-org/react";
 import { H2 } from "../components/typography";
-import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 interface Developer {
   _id: number;
@@ -12,6 +12,7 @@ interface Developer {
   location: string;
   rate_currency: string;
   rate_type: string;
+  phone_number: string;
 }
 
 const Landing = () => {
@@ -93,12 +94,14 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
-      <main className="container mx-auto px-4 py-8">
-        <H2 className="text-center text-3xl font-bold mb-8">
-          Connect, Collaborate, Create
+      <main className="container mx-auto px-4 py-12">
+        <H2 className="text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold mb-2 leading-relaxed">
+          Showcase Your Skills, Connect with Clients, Grow Your Career
         </H2>
-        <p className="text-center mb-5">Look no further</p>
-        <div className="relative max-w-2xl mx-auto mb-8">
+        <p className="text-xs font-light text-center text-blue-600 -mt-1">
+          Start Your Search Now
+        </p>
+        <div className="relative max-w-2xl mx-auto mb-8 mt-6">
           <input
             type="text"
             placeholder="Start typing to search..."
@@ -114,20 +117,6 @@ const Landing = () => {
             >
               ×
             </button>
-          )}
-          {query && filteredDevelopers.length > 0 && (
-            <div className="absolute bg-white border border-gray-300 rounded-lg w-full mt-2 shadow-md max-h-60 overflow-y-auto z-10">
-              {filteredDevelopers.map((developer) => (
-                <Link
-                  key={developer._id}
-                  href={`/profile/${developer._id}`}
-                  className="block px-4 py-2 hover:bg-gray-200"
-                >
-                  {developer.first_name} {developer.last_name} -{" "}
-                  {developer.specialization}
-                </Link>
-              ))}
-            </div>
           )}
         </div>
         <div className="flex flex-wrap gap-2 justify-center mb-8">
@@ -148,7 +137,6 @@ const Landing = () => {
               key={developer._id}
               href={`/profile/${developer._id}`}
               className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start text-left hover:shadow-lg transition-shadow"
-              // style={{ width: '250px', height: '210px' }}
             >
               <div className="flex flex-col justify-between ">
                 <div>
@@ -166,8 +154,13 @@ const Landing = () => {
                   <Button className="bg-blue-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
                     <FaPhoneAlt className="mr-2" /> Call
                   </Button>
-                  <Button className="bg-green-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
-                    <FaEnvelope className="mr-2" /> Email
+                  <Button
+                    className="bg-[#23A5F1] text-white font-bold px-4 py-1 rounded-full flex items-center"
+                    onClick={() => {
+                      window.location.href = `https://wa.me/${developer.phone_number}`;
+                    }}
+                  >
+                    <FaWhatsapp className="mr-2" /> Chat
                   </Button>
                 </div>
               </div>
