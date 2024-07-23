@@ -11,6 +11,9 @@ import ForgotPassword from "./pages/Forgot";
 import AuthGuard from "./context/authGuard";
 // import ResetPassword from "./pages/resett";
 import ResetPassword from "./pages/ResetPassword";
+import NotFoundPage from "./pages/NotFoundPage";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import FAQs from "./pages/FAQs";
 
 const Router = () => {
   const routes = useRoutes([
@@ -54,6 +57,18 @@ const Router = () => {
         {
           path: "auth/login",
           element: <Login />,
+        },
+        {
+          path: "termsandconditions",
+          element: <TermsAndConditions />,
+        },
+        {
+          path: "faqs",
+          element: <FAQs />,
+        },
+        {
+          path: "*",
+          element: <NotFoundPage />,
         },
         { path: "admin", element: <Admin /> },
       ],

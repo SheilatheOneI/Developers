@@ -1,12 +1,20 @@
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Button, Card } from "@nextui-org/react";
-import { H5, H6, Subtitle2 } from "../components/typography.tsx";
-import { FiPhone, FiMail } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
+import { Button, Progress, Avatar, Tooltip, Badge } from "@nextui-org/react";
+import {
+  FiPhone,
+  FiMail,
+  FiLinkedin,
+  FiGithub,
+  FiStar,
+  FiAward,
+} from "react-icons/fi";
 
 interface Developer {
   id: number;
   first_name: string;
+  last_name: string;
   specialization: string;
   bio: string;
   rate: number;
@@ -14,9 +22,18 @@ interface Developer {
   email: string;
   jobType: string;
   location: string;
+  skills: { name: string; level: number }[];
+  experience: number;
+  completedProjects: number;
+  rating: number;
+  availability: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  profilePicture: string;
 }
 
 const UserProfile: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [developer, setDeveloper] = useState<Developer | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,12 +45,13 @@ const UserProfile: React.FC = () => {
           `https://gigit.onrender.com/api/users/${id}`
         );
         const data = await response.json();
-        console.log(data);
-
-        setDeveloper(data);
+        setDeveloper({
+          ...data,
+          skills: data.skills || [],
+        });
         setLoading(false);
       } catch (error) {
-        console.log("Error fetching developer data");
+        console.log("Error fetching developer data", error);
         setLoading(false);
       }
     };
@@ -45,56 +63,158 @@ const UserProfile: React.FC = () => {
   if (!developer) return <div>Developer not found</div>;
 
   return (
-    <section className="mx-auto max-w-screen-lg p-4">
-      <section className="flex flex-col text-center gap-y-1 md:w-3/4 lg:w-1/2 mx-auto p-4 border-moonstone border-2 rounded-lg my-6 items-center">
-        <span className="flex justify-center mb-4">
-          <img
-            src="/src/images/logo2.jpg"
-            alt="logo"
-            className="w-24 h-24 md:w-32 md:h-32 rounded-full"
-          />
-        </span>
-        <H5 className="font-bold text-lg md:text-xl">{developer.first_name}</H5>
-        <H5 className="font-bold text-lg md:text-xl">{developer.jobType}</H5>
-        <H5 className="font-bold text-lg md:text-xl">{developer.location}</H5>
-        <Subtitle2 className="font-bold text-md md:text-lg">
-          {developer.specialization}
-        </Subtitle2>
-        <Subtitle2 className="font-bold text-yellow-500 text-md md:text-lg">
-          Rates: ${developer.rate}/hour
-        </Subtitle2>
-        <H6 className="underline italic text-md md:text-lg">Bio</H6>
-        <p className="text-sm md:text-base">{developer.bio}</p>
-        <Card className="w-full  py-1">
-          <H6 className="underline italic text-md md:text-lg">Contacts</H6>
-          <section className="grid grid-cols-[1fr,3fr] gap-y-2 gap-x-2 text-sm md:text-base">
-            <h6 className="text-start">Phone:</h6>
-            <h6 className="text-start">{developer.phone_number}</h6>
-            <h6 className="text-start">Email:</h6>
-            <h6 className="text-start">{developer.email}</h6>
-          </section>
-          <section className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+    <div className="bg-gray-100 min-h-screen py-8">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <Button
+          color="primary"
+          variant="light"
+          className="mb-4"
+          onClick={() => navigate("/")}
+          startContent={<FiArrowLeft />}
+        >
+          Back to Home
+        </Button>
+        <div className="md:flex">
+          <div className="md:flex-shrink-0">
+            <Avatar
+              src={developer.profilePicture}
+              alt={`${developer.first_name} ${developer.last_name}`}
+              className="h-48 w-full object-cover md:w-48"
+            />
+          </div>
+          <div className="p-8">
+            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+              {developer.specialization}
+            </div>
+            <h1 className="mt-2 text-3xl font-bold text-gray-900">
+              {developer.first_name} {developer.last_name}
+            </h1>
+            <p className="mt-2 text-gray-600">{developer.jobType}</p>
+            <p className="mt-2 text-gray-600">{developer.location}</p>
+            <div className="mt-4 flex items-center">
+              <Badge color="warning" variant="flat">
+                ${developer.rate}/hour
+              </Badge>
+              <Badge color="success" variant="flat" className="ml-2">
+                {developer.availability}
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-8 py-4 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-900">About Me</h2>
+          <p className="mt-2 text-gray-600">{developer.bio}</p>
+        </div>
+
+        <div className="px-8 py-4">
+          <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {developer.skills?.map((skill) => (
+              <div key={skill.name}>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    {skill.name}
+                  </span>
+                  <span className="text-sm font-medium text-gray-500">
+                    {skill.level}%
+                  </span>
+                </div>
+                <Progress value={skill.level} className="mt-2" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="px-8 py-4 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-900">Experience</h2>
+          <div className="mt-4 flex justify-between items-center">
+            <div>
+              <p className="text-3xl font-bold text-gray-900">
+                {developer.experience}
+              </p>
+              <p className="text-sm text-gray-600">Years of Experience</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-gray-900">
+                {developer.completedProjects}
+              </p>
+              <p className="text-sm text-gray-600">Completed Projects</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-gray-900 flex items-center">
+                {developer.rating} <FiStar className="text-yellow-400 ml-1" />
+              </p>
+              <p className="text-sm text-gray-600">Average Rating</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-8 py-4">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Contact Information
+          </h2>
+          <div className="mt-4 space-y-4">
+            <div className="flex items-center">
+              <FiPhone className="text-gray-400 mr-2" />
+              <span>{developer.phone_number}</span>
+            </div>
+            <div className="flex items-center">
+              <FiMail className="text-gray-400 mr-2" />
+              <span>{developer.email}</span>
+            </div>
+          </div>
+          <div className="mt-6 flex space-x-4">
             <Button
-              as={Link}
-              to={`tel:${developer.phone_number}`}
-              className="bg-green-600 font-semibold rounded-sm text-white py-1 flex items-center justify-center gap-2"
+              color="success"
+              as="a"
+              href={`tel:${developer.phone_number}`}
             >
-              <FiPhone />
-              Call
+              <FiPhone className="mr-2" /> Call
             </Button>
-            <Button
-              as={Link}
-              target="_blank"
-              to={`mailto:${developer.email}`}
-              className="bg-blue-600 font-semibold rounded-sm text-white py-1 flex items-center justify-center gap-2"
-            >
-              <FiMail />
-              Email
+            <Button color="primary" as="a" href={`mailto:${developer.email}`}>
+              <FiMail className="mr-2" /> Email
             </Button>
-          </section>
-        </Card>
-      </section>
-    </section>
+          </div>
+        </div>
+
+        <div className="px-8 py-4 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Social Profiles
+          </h2>
+          <div className="mt-4 flex space-x-4">
+            <Tooltip content="LinkedIn Profile">
+              <Button
+                color="default"
+                as="a"
+                href={developer.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FiLinkedin className="mr-2" /> LinkedIn
+              </Button>
+            </Tooltip>
+            <Tooltip content="GitHub Profile">
+              <Button
+                color="default"
+                as="a"
+                href={developer.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FiGithub className="mr-2" /> GitHub
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
+
+        <div className="px-8 py-4">
+          <Button color="secondary" className="w-full">
+            <FiAward className="mr-2" /> Hire {developer.first_name}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

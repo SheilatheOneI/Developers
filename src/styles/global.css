@@ -7,4 +7,8 @@
   margin-left: auto;
   margin-right: auto;
 }
-
+.sticky-sidebar {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+}

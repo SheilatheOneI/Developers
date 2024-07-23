@@ -61,13 +61,13 @@ const ForgotPassword: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-w p-4">
       <ToastContainer className="toast-container" />
       <button
-        className="absolute top-16 left-12 text-[#1C5D99] hover:underline"
+        className="absolute top-16 left-12 text-black hover:underline"
         onClick={() => navigate("/auth/login")}
       >
         &larr; Back
       </button>
       <div className="bg-white shadow-md rounded-2xl p-8 max-w-sm w-full">
-        <h1 className="text-3xl font-semibold text-center mb-1">DevConnect</h1>
+        <h1 className="text-3xl font-semibold text-center mb-1">Gigit</h1>
         <p className="text-lg text-center mb-2 font-medium text-gray-600">
           Forgot Your Password
         </p>
@@ -90,7 +90,7 @@ const ForgotPassword: React.FC = () => {
               {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
               <button
                 type="submit"
-                className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm"
+                className="w-full bg-[#F13223] text-white py-3 rounded-full hover:bg-[#F13223] transition-colors text-sm"
               >
                 {loading ? "Loading..." : "Send Link"}
               </button>
@@ -103,13 +103,13 @@ const ForgotPassword: React.FC = () => {
             </p>
             <button
               onClick={() => navigate("/auth/login")}
-              className="w-full bg-[#1C5D99] text-white py-3 rounded-full hover:bg-[#164973] transition-colors text-sm mb-4"
+              className="w-full bg-[#F13223] text-white py-3 rounded-full hover:bg-[#db5349] transition-colors text-sm mb-4"
             >
               Back to Login
             </button>
             <button
               onClick={handleResendLink}
-              className="w-full bg-white text-[#1C5D99] py-3 rounded-full border border-[#1C5D99] hover:bg-[#f0f8ff] transition-colors text-sm"
+              className="w-full bg-white text-[#F13223] py-3 rounded-full border border-[#F13223] hover:bg-[#f0f8ff] transition-colors text-sm"
             >
               Resend Link
             </button>
@@ -119,7 +119,7 @@ const ForgotPassword: React.FC = () => {
           <p className="text-center mt-4 text-sm text-gray-500">
             Remembered your password?{" "}
             <span
-              className="text-[#1C5D99] cursor-pointer hover:underline"
+              className="text-[#F13223] cursor-pointer hover:underline"
               onClick={() => navigate("/auth/login")}
             >
               Login
