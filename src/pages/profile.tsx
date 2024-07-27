@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { Button, Progress, Avatar, Tooltip, Badge } from "@nextui-org/react";
+import { Button, Progress, Avatar,  Badge } from "@nextui-org/react";
+import { Developer } from "../types/auth";
 import {
   FiPhone,
   FiMail,
@@ -11,26 +12,26 @@ import {
   FiAward,
 } from "react-icons/fi";
 
-interface Developer {
-  id: number;
-  first_name: string;
-  last_name: string;
-  specialization: string;
-  bio: string;
-  rate: number;
-  phone_number: string;
-  email: string;
-  jobType: string;
-  location: string;
-  skills: { name: string; level: number }[];
-  experience: number;
-  completedProjects: number;
-  rating: number;
-  availability: string;
-  linkedinUrl: string;
-  githubUrl: string;
-  profilePicture: string;
-}
+// interface Developer {
+//   id: number;
+//   first_name: string;
+//   last_name: string;
+//   specialization: string;
+//   bio: string;
+//   rate: number;
+//   phone_number: string;
+//   email: string;
+//   jobType: string;
+//   location: string;
+//   skills: { name: string; level: number }[];
+//   experience: number;
+//   completedProjects: number;
+//   rating: number;
+//   availability: string;
+//   linkedinUrl: string;
+//   githubUrl: string;
+//   profilePicture: string;
+// }
 
 const UserProfile: React.FC = () => {
   const navigate = useNavigate();
@@ -47,7 +48,12 @@ const UserProfile: React.FC = () => {
         const data = await response.json();
         setDeveloper({
           ...data,
-          skills: data.skills || [],
+           skills: data.skills || [],
+        experience: data.experience || 0,
+        completedProjects: data.completedProjects || 0,
+        rating: data.rating ,
+        linkedinUrl: data.linkedinUrl || '',
+        githubUrl: data.githubUrl || '',
         });
         setLoading(false);
       } catch (error) {
@@ -95,9 +101,7 @@ const UserProfile: React.FC = () => {
               <Badge color="warning" variant="flat">
                 ${developer.rate}/hour
               </Badge>
-              <Badge color="success" variant="flat" className="ml-2">
-                {developer.availability}
-              </Badge>
+              
             </div>
           </div>
         </div>
@@ -109,14 +113,14 @@ const UserProfile: React.FC = () => {
 
         <div className="px-8 py-4">
           <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-4  sm:grid-cols-2">
             {developer.skills?.map((skill) => (
               <div key={skill.name}>
-                <div className="flex justify-between items-center">
+                <div className="flex space-x-5 items-center">
                   <span className="text-sm font-medium text-gray-600">
                     {skill.name}
                   </span>
-                  <span className="text-sm font-medium text-gray-500">
+                  <span className="text-sm font-medium text-gray-500"> -level:
                     {skill.level}%
                   </span>
                 </div>
@@ -183,7 +187,6 @@ const UserProfile: React.FC = () => {
             Social Profiles
           </h2>
           <div className="mt-4 flex space-x-4">
-            <Tooltip content="LinkedIn Profile">
               <Button
                 color="default"
                 as="a"
@@ -193,8 +196,7 @@ const UserProfile: React.FC = () => {
               >
                 <FiLinkedin className="mr-2" /> LinkedIn
               </Button>
-            </Tooltip>
-            <Tooltip content="GitHub Profile">
+            
               <Button
                 color="default"
                 as="a"
@@ -204,7 +206,7 @@ const UserProfile: React.FC = () => {
               >
                 <FiGithub className="mr-2" /> GitHub
               </Button>
-            </Tooltip>
+            
           </div>
         </div>
 
