@@ -1,3 +1,5 @@
+// auth.ts
+
 export type AuthState = {
   user: null | User;
   isAuthenticated: boolean;
@@ -16,7 +18,14 @@ export type AuthCtx = {
 };
 
 export interface User {
-  _id: string;
+  skills: never[];
+  experience: number;
+  completedProjects: number;
+  rating: number;
+  availability: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  _id: number;
   first_name: string;
   last_name: string;
   specialization: string;
@@ -27,6 +36,27 @@ export interface User {
   jobType: string;
   location: string;
   verified: boolean;
+}
+
+export interface Developer {
+  _id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  specialization: string;
+  jobType: string;
+  location: string;
+  rate: number;
+  bio: string;
+  skills: { name: string; level: number }[];
+  experience: number;
+  completedProjects: number;
+  rating: number;
+  availability: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  profilePicture: string;
 }
 
 export type LoginData = {
@@ -40,10 +70,6 @@ export interface SignUpData {
   agreeTerms: boolean;
   first_name: string;
   last_name: string;
-  // user_data: {
-  //   first_name: string;
-  //   last_name: string;
-  // }[];
 }
 
 export type AuthActions =
@@ -51,7 +77,7 @@ export type AuthActions =
       type: AuthActionsTypes.INITIAL;
       payload: boolean;
     }
-    | {
+  | {
       type: AuthActionsTypes.LOGIN;
       payload: User;
     }
@@ -79,16 +105,4 @@ export enum AuthActionsTypes {
   SIGNUP = "SIGNUP",
   UPDATEPROFILE = "UPDATEPROFILE",
   DELETEPROFILE = "DELETEPROFILE",
-}
-
-export interface Developer {
-  id: number;
-  first_name: string;
-  specialization: string;
-  bio: string;
-  rate: number;
-  phone_number: string;
-  email: string;
-  jobType: string;
-  location: string;
 }
