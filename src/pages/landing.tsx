@@ -95,7 +95,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-white overflow-hidden">
       <main className="container mx-auto px-4 py-12">
-        <H2 className="text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold mb-2 leading-relaxed">
+        <H2 className="font-lora text-center text-2xl sm:text-sm md:text-base lg:text-lg font-bold mb-2 leading-relaxed">
           Showcase Your Skills, Connect with Clients, Grow Your Career
         </H2>
         <p className="text-xs font-light text-center text-blue-600 -mt-1">
@@ -130,9 +130,9 @@ const Landing = () => {
             </button>
           ))}
         </div>
-        <h3 className="text-2xl text-center font-bold mb-4">Recent Searches</h3>
+        <h3 className="text-2xl font-lora text-center font-bold mb-4">Recent Searches</h3>
         <div className="flex flex-wrap justify-center gap-4">
-          {filteredDevelopers.slice(-6).map((developer) => (
+          {filteredDevelopers.slice(-3).map((developer) => (
             <Link
               key={developer._id}
               href={`/profile/${developer._id}`}
@@ -140,7 +140,7 @@ const Landing = () => {
             >
               <div className="flex flex-col justify-between ">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">
+                  <h3 className="text-lg font-lora font-bold text-gray-900">
                     {developer.first_name} {developer.last_name}
                   </h3>
                   <p className="text-sm text-gray-600">

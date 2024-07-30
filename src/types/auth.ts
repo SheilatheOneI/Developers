@@ -49,7 +49,7 @@ export interface Developer {
   location: string;
   rate: number;
   bio: string;
-  skills: { name: string; level: number }[];
+  skills: { name: string; level: string }[];
   experience: number;
   completedProjects: number;
   rating: number;
@@ -58,6 +58,7 @@ export interface Developer {
   githubUrl: string;
   profilePicture: string;
 }
+
 
 export type LoginData = {
   email: string;
