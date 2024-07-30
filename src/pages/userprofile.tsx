@@ -25,7 +25,7 @@ interface Developer {
   location: string;
   rate: number;
   bio: string;
-  skills: { name: string; level: number }[];
+  skills: { name: string; level: string }[];
   experience: number;
   completedProjects: number;
   rating: number;
@@ -58,7 +58,7 @@ const Profile: React.FC = () => {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormValues((prev) => {
@@ -83,13 +83,14 @@ const Profile: React.FC = () => {
   const handleSave = async (section: keyof typeof sectionFields) => {
     if (!formValues) return;
     try {
-      const sectionData = Object.keys(formValues)
+      const sectionData: Partial<Developer> = Object.keys(formValues)
         .filter(key => sectionFields[section].includes(key as DeveloperKeys))
         .reduce((obj, key) => {
-          if (key === 'skills') {
-            obj[key] = formValues[key];
+          const typedKey = key as DeveloperKeys;
+          if (typedKey === 'skills') {
+            (obj[typedKey] as typeof formValues[typeof typedKey]) = formValues[typedKey];
           } else {
-            obj[key as DeveloperKeys] = formValues[key as DeveloperKeys];
+            (obj[typedKey] as typeof formValues[typeof typedKey]) = formValues[typedKey];
           }
           return obj;
         }, {} as Partial<Developer>);
@@ -100,11 +101,12 @@ const Profile: React.FC = () => {
       console.error("Error updating developer data:", error);
     }
   };
+  
 
   const handleDelete = async () => {
     if (!user?._id) return;
     try {
-      deleteProfile(user?._id as unknown as string);
+      deleteProfile(user._id.toString());
       navigate("/");
     } catch (error) {
       console.error("Error deleting developer profile:", error);
@@ -116,18 +118,18 @@ const Profile: React.FC = () => {
       if (!prev) return null;
       return {
         ...prev,
-        skills: [...prev.skills, { name: '', level: 0 }]
+        skills: [...prev.skills, { name: '', level: 'Beginner' }]
       };
     });
   };
 
-  const handleSkillChange = (index: number, field: 'name' | 'level', value: string | number) => {
+  const handleSkillChange = (index: number, field: 'name' | 'level', value: string) => {
     setFormValues(prev => {
       if (!prev) return null;
       return {
         ...prev,
         skills: prev.skills.map((skill, i) => 
-          i === index ? { ...skill, [field]: field === 'level' ? Number(value) : value } : skill
+          i === index ? { ...skill, [field]: value } : skill
         )
       };
     });
@@ -170,8 +172,8 @@ const Profile: React.FC = () => {
               <FontAwesomeIcon icon={faUser} />
             </div>
             <div className="text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold">{`${formValues.first_name} ${formValues.last_name}`}</h1>
-              <p className="text-gray-600">{formValues.specialization}</p>
+              <h1 className="text-2xl font-lora sm:text-3xl font-bold">{`${formValues.first_name} ${formValues.last_name}`}</h1>
+              <p className="text-gray-600 font-openSans">{formValues.specialization}</p>
             </div>
           </div>
           
@@ -196,7 +198,7 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="bg-red-50 p-4 sm:p-8 rounded-lg shadow-lg border border-red-200">
-          <h2 className="text-2xl font-semibold mb-4 text-red-600">Danger Zone</h2>
+          <h2 className="text-2xl font-lora font-semibold mb-4 text-red-600">Danger Zone</h2>
           <p className="mb-4 text-gray-700">Deleting your profile is permanent and cannot be undone.</p>
           <button
             onClick={() => setShowDeleteConfirm(true)}
@@ -241,10 +243,10 @@ interface ProfileSectionProps {
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onPhoneChange?: (value: string | undefined) => void;
   multiline?: boolean;
-  handleSkillChange: (index: number, field: 'name' | 'level', value: string | number) => void;
+  handleSkillChange: (index: number, field: 'name' | 'level', value: string) => void;
   handleDeleteSkill: (index: number) => void;
   handleAddSkill: () => void;
 }
@@ -259,68 +261,51 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   onCancel,
   onChange,
   onPhoneChange,
-  multiline = false,
+  multiline,
   handleSkillChange,
   handleDeleteSkill,
   handleAddSkill,
 }) => {
   return (
-    <div className="mt-8">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">{title}</h2>
-        {isEditing ? (
-          <div>
-            <button onClick={onSave} className="text-green-500 hover:text-green-600 transition duration-300 mr-2">
-              <FontAwesomeIcon icon={faSave} />
-            </button>
-            <button onClick={onCancel} className="text-red-500 hover:text-red-600 transition duration-300">
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-        ) : (
-          <button onClick={onEdit} className="text-blue-500 hover:text-blue-600 transition duration-300">
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
-        )}
-      </div>
-      <div className="space-y-4">
-        {fields.map((field) => (
-          <div key={field}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {field.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-            </label>
-            {isEditing ? (
-              field === 'phone_number' && onPhoneChange ? (
+    <div className="mb-8">
+      <h2 className="text-xl font-lora font-semibold mb-4">{title}</h2>
+      {isEditing ? (
+        <>
+          {fields.map((field) => (
+            <div key={field} className="mb-4">
+              <label htmlFor={field} className="block text-gray-700 font-semibold mb-2 capitalize">
+                {field.replace(/_/g, " ")}
+              </label>
+              {field === "phone_number" && onPhoneChange ? (
                 <PhoneInput
-                  defaultCountry="KE"
-                  placeholder="Enter phone number"
-                  value={formValues[field]}
+                  id={field}
+                  value={formValues.phone_number}
                   onChange={onPhoneChange}
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="w-full border border-gray-300 p-2 rounded"
                 />
-              ) : field === 'skills' ? (
-                <div>
+              ) : field === "skills" ? (
+                <>
                   {formValues.skills.map((skill, index) => (
-                    <div key={index} className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-2">
+                    <div key={index} className="flex gap-4 items-center mb-2">
                       <input
                         type="text"
                         value={skill.name}
-                        onChange={(e) => handleSkillChange(index, 'name', e.target.value)}
-                        placeholder="Skill name"
-                        className="border p-2 rounded w-full sm:w-auto flex-grow"
+                        onChange={(e) => handleSkillChange(index, "name", e.target.value)}
+                        className="w-1/2 border border-gray-300 p-2 rounded"
+                        placeholder="Skill Name"
                       />
-                      <input
-                        type="number"
+                      <select
                         value={skill.level}
-                        onChange={(e) => handleSkillChange(index, 'level', e.target.value)}
-                        min="0"
-                        max="10"
-                        placeholder="Level (0-10)"
-                        className="border p-2 rounded w-full sm:w-24"
-                      />
+                        onChange={(e) => handleSkillChange(index, "level", e.target.value)}
+                        className="w-1/3 border border-gray-300 p-2 rounded"
+                      >
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                      </select>
                       <button
                         onClick={() => handleDeleteSkill(index)}
-                        className="text-red-500 hover:text-red-600 transition duration-300 w-full sm:w-auto"
+                        className="text-red-500 hover:text-red-700"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
@@ -328,42 +313,76 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
                   ))}
                   <button
                     onClick={handleAddSkill}
-                    className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 w-full sm:w-auto"
+                    className="text-blue-500 hover:text-blue-700"
                   >
                     Add Skill
                   </button>
-                </div>
+                </>
               ) : multiline ? (
                 <textarea
+                  id={field}
                   name={field}
-                  value={formValues[field] != null ? formValues[field].toString() : ''}
+                  value={formValues[field]}
                   onChange={onChange}
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="w-full border border-gray-300 p-2 rounded"
                   rows={4}
                 />
               ) : (
                 <input
-                  type={field === 'rate' || field === 'experience' || field === 'completedProjects' || field === 'rating' ? 'number' : 'text'}
+                  id={field}
                   name={field}
-                  value={formValues[field] != null ? formValues[field].toString() : ''}
+                  type={typeof formValues[field] === "number" ? "number" : "text"}
+                  value={formValues[field]}
                   onChange={onChange}
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="w-full border border-gray-300 p-2 rounded"
                 />
-              )
-            ) : (
-              field === 'skills' ? (
-                <ul>
+              )}
+            </div>
+          ))}
+          <div className="flex gap-4">
+            <button
+              onClick={onSave}
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+            >
+              <FontAwesomeIcon icon={faSave} className="mr-2" />
+              Save
+            </button>
+            <button
+              onClick={onCancel}
+              className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300"
+            >
+              <FontAwesomeIcon icon={faTimes} className="mr-2" />
+              Cancel
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          {fields.map((field) => (
+            <div key={field} className="mb-4">
+              <label className="block text-gray-700 font-semibold capitalize">
+                {field.replace(/_/g, " ")}
+              </label>
+              {field === "skills" ? (
+                <ul className="list-disc pl-5">
                   {formValues.skills.map((skill, index) => (
-                    <li key={index}>{skill.name} - Level: {skill.level}</li>
+                    <li key={index}>{`${skill.name} (${skill.level})`}</li>
                   ))}
                 </ul>
               ) : (
-                <p>{formValues[field] != null ? formValues[field].toString() : ''}</p>
-              )
-            )}
-          </div>
-        ))}
-      </div>
+                <p className="text-gray-700">{formValues[field]}</p>
+              )}
+            </div>
+          ))}
+          <button
+            onClick={onEdit}
+            className="text-blue-500 hover:text-blue-700 transition duration-300"
+          >
+            <FontAwesomeIcon icon={faEdit} className="mr-2" />
+            Edit
+          </button>
+        </>
+      )}
     </div>
   );
 };

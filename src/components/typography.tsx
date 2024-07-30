@@ -19,7 +19,7 @@ export const H1 = ({ children, className }: TypographyProps) => (
 export const H2 = ({ children, className }: TypographyProps) => (
   <h2
     className={clsx(
-      "text-[1.5rem]  md:text-[1.5rem] lg:text-[1.75rem]  2xl:text-[2.5rem] text-prmary-default font-semibold",
+      "text-[1.5rem]  md:text-[1.5rem] lg:text-[1.75rem]  2xl:text-[3.5rem] text-prmary-default font-semibold",
       className
     )}
   >

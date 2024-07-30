@@ -71,7 +71,7 @@ const NavbarLayout = () => {
           <Link href="/faqs" className="flex items-center">
             <FiHelpCircle className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </Link>
-          <Link href="*" className="text-gray-600">
+          <Link href="/admin" className="text-gray-600">
             <FaUser className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </Link>
           

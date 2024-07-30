@@ -92,7 +92,7 @@ const UserProfile: React.FC = () => {
             <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
               {developer.specialization}
             </div>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900">
+            <h1 className="mt-2 text-3xl font-bold text-gray-900 font-lora">
               {developer.first_name} {developer.last_name}
             </h1>
             <p className="mt-2 text-gray-600">{developer.jobType}</p>
@@ -107,12 +107,12 @@ const UserProfile: React.FC = () => {
         </div>
 
         <div className="px-8 py-4 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-900">About Me</h2>
+          <h2 className="text-xl font-semibold text-gray-900 font-lora">About Me</h2>
           <p className="mt-2 text-gray-600">{developer.bio}</p>
         </div>
 
         <div className="px-8 py-4">
-          <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
+          <h2 className="text-xl font-semibold text-gray-900 font-lora">Skills</h2>
           <div className="mt-4  sm:grid-cols-2">
             {developer.skills?.map((skill) => (
               <div key={skill.name}>
@@ -131,31 +131,31 @@ const UserProfile: React.FC = () => {
         </div>
 
         <div className="px-8 py-4 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-900">Experience</h2>
+          <h2 className="text-xl font-semibold text-gray-900 font-lora">Experience</h2>
           <div className="mt-4 flex justify-between items-center">
             <div>
               <p className="text-3xl font-bold text-gray-900">
                 {developer.experience}
               </p>
-              <p className="text-sm text-gray-600">Years of Experience</p>
+              <p className="text-sm text-gray-600 font-lora">Years of Experience</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="text-3xl font-bold text-gray-900 font-lora">
                 {developer.completedProjects}
               </p>
-              <p className="text-sm text-gray-600">Completed Projects</p>
+              <p className="text-sm text-gray-600 font-lora">Completed Projects</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gray-900 flex items-center">
                 {developer.rating} <FiStar className="text-yellow-400 ml-1" />
               </p>
-              <p className="text-sm text-gray-600">Average Rating</p>
+              <p className="text-sm text-gray-600 font-lora">Average Rating</p>
             </div>
           </div>
         </div>
 
         <div className="px-8 py-4">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-gray-900 font-lora">
             Contact Information
           </h2>
           <div className="mt-4 space-y-4">
@@ -168,13 +168,13 @@ const UserProfile: React.FC = () => {
               <span>{developer.email}</span>
             </div>
           </div>
-          <div className="mt-6 flex space-x-4">
+          <div className="mt-6 flex space-x-4 font-lora">
             <Button
               color="success"
               as="a"
               href={`tel:${developer.phone_number}`}
             >
-              <FiPhone className="mr-2" /> Call
+              <FiPhone className="mr-2 font-lora" /> Call
             </Button>
             <Button color="primary" as="a" href={`mailto:${developer.email}`}>
               <FiMail className="mr-2" /> Email
@@ -183,7 +183,7 @@ const UserProfile: React.FC = () => {
         </div>
 
         <div className="px-8 py-4 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-gray-900 font-lora">
             Social Profiles
           </h2>
           <div className="mt-4 flex space-x-4">

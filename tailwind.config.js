@@ -17,11 +17,10 @@ module.exports = {
         powder: "#F13223",
       },
       fontFamily: {
-        sans: ['Space Mono', 'sans-serif'],
+        lora: ['Lora', 'serif'],
+        openSans: ['Open Sans', 'sans-serif'],
       },
-      // backgroundImage: {
-      //   landing: "url('src/images/landing2.png')",
-      // },
+      
     },
   },
   variants: {
