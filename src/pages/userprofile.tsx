@@ -14,18 +14,24 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
+interface Skill {
+  _id: string;
+  name: string;
+  level: string;
+}
+
 interface Developer {
   _id: number;
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  phone_number: string | undefined;
   specialization: string;
   jobType: string;
   location: string;
   rate: number;
   bio: string;
-  skills: { name: string; level: string }[];
+  skills: Skill[];
   experience: number;
   completedProjects: number;
   rating: number;
@@ -38,6 +44,7 @@ type DeveloperKeys = keyof Developer;
 
 const Profile: React.FC = () => {
   const [formValues, setFormValues] = useState<Developer | null>(null);
+  const [skillsToDelete, setSkillsToDelete] = useState<string[]>([]);
   const [editingSections, setEditingSections] = useState<string[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
@@ -87,26 +94,27 @@ const Profile: React.FC = () => {
         .filter(key => sectionFields[section].includes(key as DeveloperKeys))
         .reduce((obj, key) => {
           const typedKey = key as DeveloperKeys;
-          if (typedKey === 'skills') {
-            (obj[typedKey] as typeof formValues[typeof typedKey]) = formValues[typedKey];
-          } else {
-            (obj[typedKey] as typeof formValues[typeof typedKey]) = formValues[typedKey];
-          }
+          (obj[typedKey] as typeof formValues[typeof typedKey]) = formValues[typedKey];
           return obj;
         }, {} as Partial<Developer>);
       
-      updateProfile(sectionData);
+      if (section === 'professional') {
+        await updateProfile(sectionData, skillsToDelete);
+      } else {
+        await updateProfile(sectionData);
+      }
+      
       setEditingSections(prev => prev.filter(s => s !== section));
+      setSkillsToDelete([]);
     } catch (error) {
       console.error("Error updating developer data:", error);
     }
   };
-  
 
   const handleDelete = async () => {
     if (!user?._id) return;
     try {
-      deleteProfile(user._id.toString());
+      await deleteProfile(user._id.toString());
       navigate("/");
     } catch (error) {
       console.error("Error deleting developer profile:", error);
@@ -118,7 +126,7 @@ const Profile: React.FC = () => {
       if (!prev) return null;
       return {
         ...prev,
-        skills: [...prev.skills, { name: '', level: 'Beginner' }]
+        skills: [...prev.skills, { _id: `new-${Date.now()}`, name: '', level: 'Beginner' }]
       };
     });
   };
@@ -138,6 +146,10 @@ const Profile: React.FC = () => {
   const handleDeleteSkill = (index: number) => {
     setFormValues(prev => {
       if (!prev) return null;
+      const skillToDelete = prev.skills[index];
+      if (skillToDelete._id && !skillToDelete._id.startsWith('new-')) {
+        setSkillsToDelete(prevSkillsToDelete => [...prevSkillsToDelete, skillToDelete._id]);
+      }
       return {
         ...prev,
         skills: prev.skills.filter((_, i) => i !== index)
@@ -246,9 +258,9 @@ interface ProfileSectionProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onPhoneChange?: (value: string | undefined) => void;
   multiline?: boolean;
-  handleSkillChange: (index: number, field: 'name' | 'level', value: string) => void;
-  handleDeleteSkill: (index: number) => void;
-  handleAddSkill: () => void;
+  handleSkillChange?: (index: number, field: 'name' | 'level', value: string) => void;
+  handleDeleteSkill?: (index: number) => void;
+  handleAddSkill?: () => void;
 }
 
 const ProfileSection: React.FC<ProfileSectionProps> = ({
@@ -261,130 +273,128 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   onCancel,
   onChange,
   onPhoneChange,
-  multiline,
+  multiline = false,
   handleSkillChange,
   handleDeleteSkill,
   handleAddSkill,
-}) => {
-  return (
-    <div className="mb-8">
-      <h2 className="text-xl font-lora font-semibold mb-4">{title}</h2>
+}) => (
+  <div className="mb-8">
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-xl font-lora font-semibold">{title}</h2>
       {isEditing ? (
-        <>
-          {fields.map((field) => (
-            <div key={field} className="mb-4">
-              <label htmlFor={field} className="block text-gray-700 font-semibold mb-2 capitalize">
-                {field.replace(/_/g, " ")}
-              </label>
-              {field === "phone_number" && onPhoneChange ? (
-                <PhoneInput
-                  id={field}
-                  value={formValues.phone_number}
-                  onChange={onPhoneChange}
-                  className="w-full border border-gray-300 p-2 rounded"
-                />
-              ) : field === "skills" ? (
-                <>
-                  {formValues.skills.map((skill, index) => (
-                    <div key={index} className="flex gap-4 items-center mb-2">
-                      <input
-                        type="text"
-                        value={skill.name}
-                        onChange={(e) => handleSkillChange(index, "name", e.target.value)}
-                        className="w-1/2 border border-gray-300 p-2 rounded"
-                        placeholder="Skill Name"
-                      />
-                      <select
-                        value={skill.level}
-                        onChange={(e) => handleSkillChange(index, "level", e.target.value)}
-                        className="w-1/3 border border-gray-300 p-2 rounded"
-                      >
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                      </select>
+        <div className="space-x-2">
+          <button
+            onClick={onSave}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+          >
+            <FontAwesomeIcon icon={faSave} className="mr-2" />
+            Save
+          </button>
+          <button
+            onClick={onCancel}
+            className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300"
+          >
+            <FontAwesomeIcon icon={faTimes} className="mr-2" />
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onEdit}
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300"
+        >
+          <FontAwesomeIcon icon={faEdit} className="mr-2" />
+          Edit
+        </button>
+      )}
+    </div>
+
+    <div className="space-y-4">
+      {fields.map((field) => (
+        <div key={field}>
+          {field === 'skills' ? (
+            <>
+              <label className="block font-openSans font-semibold mb-1">Skills</label>
+              {formValues.skills.map((skill, index) => (
+                <div key={skill._id} className="mb-2">
+                  <div className="flex items-center mb-2">
+                    <input
+                      type="text"
+                      className="border p-2 rounded w-1/3 mr-2"
+                      value={skill.name}
+                      onChange={(e) => handleSkillChange?.(index, 'name', e.target.value)}
+                      placeholder="Skill name"
+                      disabled={!isEditing}
+                    />
+                    <select
+                      className="border p-2 rounded w-1/3 mr-2"
+                      value={skill.level}
+                      onChange={(e) => handleSkillChange?.(index, 'level', e.target.value)}
+                      disabled={!isEditing}
+                    >
+                      <option value="Beginner">Beginner</option>
+                      <option value="Intermediate">Intermediate</option>
+                      <option value="Advanced">Advanced</option>
+                    </select>
+                    {isEditing && (
                       <button
-                        onClick={() => handleDeleteSkill(index)}
-                        className="text-red-500 hover:text-red-700"
+                        onClick={() => handleDeleteSkill?.(index)}
+                        className="text-red-600 hover:text-red-800 transition duration-300"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={handleAddSkill}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    Add Skill
-                  </button>
-                </>
-              ) : multiline ? (
+                    )}
+                  </div>
+                </div>
+              ))}
+              {isEditing && (
+                <button
+                  onClick={handleAddSkill}
+                  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+                >
+                  Add Skill
+                </button>
+              )}
+            </>
+          ) : field === 'phone_number' ? (
+            <PhoneInput
+              value={formValues.phone_number}
+              onChange={(value: string | undefined) => onPhoneChange && onPhoneChange(value)}
+              disabled={!isEditing}
+              className="border p-2 rounded w-full"
+            />
+          ) : (
+            <>
+              <label htmlFor={field} className="block font-openSans font-semibold mb-1 capitalize">
+                {field.replace('_', ' ')}
+              </label>
+              {multiline ? (
                 <textarea
                   id={field}
                   name={field}
-                  value={formValues[field]}
+                  value={formValues[field] as string}
                   onChange={onChange}
-                  className="w-full border border-gray-300 p-2 rounded"
+                  disabled={!isEditing}
+                  className="border p-2 rounded w-full"
                   rows={4}
                 />
               ) : (
                 <input
+                  type="text"
                   id={field}
                   name={field}
-                  type={typeof formValues[field] === "number" ? "number" : "text"}
-                  value={formValues[field]}
+                  value={formValues[field] as string | number}
                   onChange={onChange}
-                  className="w-full border border-gray-300 p-2 rounded"
+                  disabled={!isEditing}
+                  className="border p-2 rounded w-full"
                 />
               )}
-            </div>
-          ))}
-          <div className="flex gap-4">
-            <button
-              onClick={onSave}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-            >
-              <FontAwesomeIcon icon={faSave} className="mr-2" />
-              Save
-            </button>
-            <button
-              onClick={onCancel}
-              className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300"
-            >
-              <FontAwesomeIcon icon={faTimes} className="mr-2" />
-              Cancel
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          {fields.map((field) => (
-            <div key={field} className="mb-4">
-              <label className="block text-gray-700 font-semibold capitalize">
-                {field.replace(/_/g, " ")}
-              </label>
-              {field === "skills" ? (
-                <ul className="list-disc pl-5">
-                  {formValues.skills.map((skill, index) => (
-                    <li key={index}>{`${skill.name} (${skill.level})`}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-700">{formValues[field]}</p>
-              )}
-            </div>
-          ))}
-          <button
-            onClick={onEdit}
-            className="text-blue-500 hover:text-blue-700 transition duration-300"
-          >
-            <FontAwesomeIcon icon={faEdit} className="mr-2" />
-            Edit
-          </button>
-        </>
-      )}
+            </>
+          )}
+        </div>
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 export default Profile;

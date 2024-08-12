@@ -1,13 +1,12 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { Button, Link } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import useAuthCtx from "../context/auth-context";
-import { H1 } from "../components/typography";
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
-type formValues = {
+type FormValues = {
   email: string;
   password: string;
 };
@@ -16,7 +15,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  const form = useForm<formValues>({
+  const form = useForm<FormValues>({
     defaultValues: {
       email: "",
       password: "",
@@ -28,7 +27,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuthCtx();
 
-  const onSubmit = async (data: formValues) => {
+  const onSubmit = async (data: FormValues) => {
     try {
       await login(data);
       navigate(`/userprofile/`);
@@ -48,9 +47,16 @@ const Login = () => {
   return (
     <div className="flex flex-col h-screen items-center bg-w overflow-hidden">
       <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
-        <div className="w-full max-w-md p-8 bg-white border-2 rounded-2xl shadow-md">
-          <H1 className="mb-2 text-4xl font text-center">Gigit</H1>
-          <p className="mb-4 text-center">Login to continue</p>
+        <div className="w-full max-w-sm p-8 bg-white border-2 rounded-2xl ">
+          <div className="flex justify-center mb-1">
+            <img
+              src="/logo2.png"
+              alt="Gigit logo"
+              className="w-32 h-16 sm:w-40 sm:h-20 object-contain"
+            />
+          </div>
+          
+          <p className="mb-4  text-center">Login to continue</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
               <input
@@ -76,8 +82,8 @@ const Login = () => {
                   required: "This field is required",
                   minLength: {
                     value: 8,
-                    message: "Password must be at least 8 characters long"
-                  }
+                    message: "Password must be at least 8 characters long",
+                  },
                 })}
               />
               <button
@@ -103,14 +109,14 @@ const Login = () => {
               </p>
             )}
             <div className="flex justify-center">
-              <span className="text-sm">Forgot Password? </span>
+              <span className="text-sm">Forgot Password?</span>
               <Link
                 href="/auth/forgot-password"
-                className="text-sm text-lapis cursor-pointer"
+                className="text-sm "
                 onClick={handleForgotPassword}
               >
-                <span className="text-[#F13223] hover:underline">
-                  Click here
+                <span className=" underline">
+                   Click here
                 </span>
               </Link>
             </div>
@@ -130,6 +136,11 @@ const Login = () => {
           <DevTool control={control} />
         </div>
       </main>
+      <footer className="py-4">
+        <p className="text-center text-sm text-gray-600">
+          Copyright © 2024 Gigit. The Tech Band Originals
+        </p>
+      </footer>
     </div>
   );
 };

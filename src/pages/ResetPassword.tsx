@@ -71,48 +71,62 @@ const ResetPassword: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-w p-4 sm:p-6 md:p-8">
       <ToastContainer className="toast-container" />
-      
-      <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px]">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-1">Gigit</h1>
-        <p className="text-base sm:text-lg text-center mb-2 font-medium text-gray-600">
-          Reset Your Password
-        </p>
-        <p className="text-center mb-6 text-xs sm:text-sm text-gray-500">
-          Enter your new password below.
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="relative mb-4">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError(null);
-              }}
-              placeholder="New Password"
-              className="w-full p-2 sm:p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#F13223] text-sm sm:text-base pr-10"
+
+      <main className="flex flex-col items-center justify-center flex-grow w-full p-4 sm:p-8">
+        <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px]">
+          <div className="flex justify-center mb-1">
+            <img
+              src="/logo2.png"
+              alt="Gigit logo"
+              className="w-32 h-16 sm:w-40 sm:h-20 object-contain"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2"
-            >
-              {showPassword ? (
-                <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-              ) : (
-                <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-              )}
-            </button>
           </div>
-          {error && <p className="text-red-500 text-xs sm:text-sm mb-4">{error}</p>}
-          <button
-            type="submit"
-            className="w-full bg-[#F13223] text-white py-2 sm:py-3 rounded-full hover:bg-[#e28983] transition-colors text-sm sm:text-base"
-          >
-            Reset Password
-          </button>
-        </form>
-      </div>
+          
+          <p className="text-base sm:text-lg text-center mb-2 font-medium text-gray-600">
+            Reset Your Password
+          </p>
+          <p className="text-center mb-6 text-xs sm:text-sm text-gray-500">
+            Enter your new password below.
+          </p>
+          <form onSubmit={handleSubmit}>
+            <div className="relative mb-4">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError(null);
+                }}
+                placeholder="New Password"
+                className="w-full p-2 sm:p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#F13223] text-sm sm:text-base pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              >
+                {showPassword ? (
+                  <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+                ) : (
+                  <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+                )}
+              </button>
+            </div>
+            {error && <p className="text-red-500 text-xs sm:text-sm mb-4">{error}</p>}
+            <button
+              type="submit"
+              className="w-full bg-[#F13223] text-white py-2 sm:py-3 rounded-full hover:bg-[#e28983] transition-colors text-sm sm:text-base"
+            >
+              Reset Password
+            </button>
+          </form>
+        </div>
+      </main>
+      <footer className="py-4">
+        <p className="text-center text-sm text-gray-600">
+          Copyright © 2024 Gigit. The Tech Band Originals
+        </p>
+      </footer>
       <style>{`
         .toast-container {
           width: 100%;

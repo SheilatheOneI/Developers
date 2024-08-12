@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { Button, Progress, Avatar,  Badge } from "@nextui-org/react";
+import { Button,  Avatar,  Badge } from "@nextui-org/react";
 import { Developer } from "../types/auth";
 import {
   FiPhone,
@@ -11,27 +11,6 @@ import {
   FiStar,
   FiAward,
 } from "react-icons/fi";
-
-// interface Developer {
-//   id: number;
-//   first_name: string;
-//   last_name: string;
-//   specialization: string;
-//   bio: string;
-//   rate: number;
-//   phone_number: string;
-//   email: string;
-//   jobType: string;
-//   location: string;
-//   skills: { name: string; level: number }[];
-//   experience: number;
-//   completedProjects: number;
-//   rating: number;
-//   availability: string;
-//   linkedinUrl: string;
-//   githubUrl: string;
-//   profilePicture: string;
-// }
 
 const UserProfile: React.FC = () => {
   const navigate = useNavigate();
@@ -120,11 +99,11 @@ const UserProfile: React.FC = () => {
                   <span className="text-sm font-medium text-gray-600">
                     {skill.name}
                   </span>
-                  <span className="text-sm font-medium text-gray-500"> -level:
-                    {skill.level}%
+                  <span className="text-sm font-medium text-gray-500">-
+                   {skill.level} level
                   </span>
                 </div>
-                <Progress value={skill.level} className="mt-2" />
+                
               </div>
             ))}
           </div>

@@ -13,7 +13,7 @@ export type AuthCtx = {
   login: (data: LoginData) => void;
   logout: () => void;
   signUp: (data: SignUpData) => void;
-  updateProfile: (data: Partial<Developer>) => void;
+  updateProfile: (userProfile: Partial<Developer>, skillsToDelete?: string[]) => Promise<void>;
   deleteProfile: (userId: string) => void;
 };
 

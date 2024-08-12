@@ -153,15 +153,15 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const updateProfile = useCallback(async (userProfile: Partial<Developer>) => {
+  const updateProfile = useCallback(async (userProfile: Partial<Developer>, skillsToDelete?: string[]) => {
     try {
       const response = await axiosFunc.put(
         "https://gigit.onrender.com/api/freelancer/update",
-        userProfile
+        { ...userProfile, skillsToDelete }
       );
-
+  
       const { user } = response.data;
-
+  
       dispatch({
         type: AuthActionsTypes.UPDATEPROFILE,
         payload: user,
