@@ -25,7 +25,7 @@ const NavbarLayout = () => {
         <div className="flex items-center">
           <Link href="/">
             <img
-              src="/src/images/logo2.png"
+              src="/logo2.png"
               alt="Gigit logo"
               className="w-20 h-10 sm:w-24 sm:h-12"
             />

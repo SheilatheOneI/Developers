@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Button, Link } from "@nextui-org/react";
-import { H2 } from "../components/typography";
-import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@nextui-org/react";
+import { FaDollarSign, FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface Developer {
   _id: number;
@@ -11,7 +13,6 @@ interface Developer {
   rate: string;
   location: string;
   rate_currency: string;
-  rate_type: string;
   phone_number: string;
 }
 
@@ -93,81 +94,115 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
-      <main className="container mx-auto px-4 py-12">
-        <H2 className="font-lora text-center text-2xl sm:text-sm md:text-base lg:text-lg font-bold mb-2 leading-relaxed">
-          Showcase Your Skills, Connect with Clients, Grow Your Career
-        </H2>
-        <p className="text-xs font-light text-center text-blue-600 -mt-1">
-          Start Your Search Now
-        </p>
-        <div className="relative max-w-2xl mx-auto mb-8 mt-6">
-          <input
-            type="text"
-            placeholder="Start typing to search..."
-            className="w-full border-2 border-gray-300 rounded-lg py-2 px-4 pr-10"
-            value={query}
-            onChange={handleSearch}
-            onKeyDown={handleKeyDown}
-          />
-          {query && (
-            <button
-              className="absolute right-3 top-1/2 transform -translate-y-1/2"
-              onClick={() => setQuery("")}
-            >
-              ×
-            </button>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
-          {specializations.map((spec) => (
-            <button
-              key={spec}
-              onClick={() => handleSpecializationClick(spec)}
-              className="bg-gray-200 rounded-full py-1 px-3 text-sm"
-            >
-              {spec}
-            </button>
-          ))}
-        </div>
-        <h3 className="text-2xl font-lora text-center font-bold mb-4">Recent Searches</h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {filteredDevelopers.slice(-3).map((developer) => (
-            <Link
-              key={developer._id}
-              href={`/profile/${developer._id}`}
-              className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start text-left hover:shadow-lg transition-shadow"
-            >
-              <div className="flex flex-col justify-between ">
-                <div>
-                  <h3 className="text-lg font-lora font-bold text-gray-900">
-                    {developer.first_name} {developer.last_name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {developer.specialization}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Rate: ${developer.rate}/hour
-                  </p>
-                </div>
-                <div className="flex mt-1 gap-2">
-                  <Button className="bg-blue-500 text-white font-bold px-4 py-1 rounded-full flex items-center">
-                    <FaPhoneAlt className="mr-2" /> Call
-                  </Button>
-                  <Button
-                    className="bg-[#23A5F1] text-white font-bold px-4 py-1 rounded-full flex items-center"
-                    onClick={() => {
-                      window.location.href = `https://wa.me/${developer.phone_number}`;
-                    }}
-                  >
-                    <FaWhatsapp className="mr-2" /> Chat
-                  </Button>
-                </div>
-              </div>
-            </Link>
-          ))}
+    <div className="flex flex-col min-h-screen bg-white">
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-lora text-center pt-4 mb-2">
+            Discover Skilled Giggers, Connect & Do
+          </h1>
+          <p className="text-sm text-center font-openSans text-gray-600 mb-6">
+            What skill are you looking for?
+          </p>
+          <div className="relative mb-8">
+            <input
+              type="text"
+              placeholder="Search for skill... e.g graphics designer"
+              className="w-full max-w-3xl mx-auto block border-2 text-center font-lora border-red-200 rounded-full py-3 px-6 pr-12 focus:outline-none focus:border-red-600"
+              value={query}
+              onChange={handleSearch}
+              onKeyDown={handleKeyDown}
+            />
+            {query && (
+              <button
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                onClick={() => setQuery("")}
+              >
+                ×
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2 justify-center mb-8">
+            {specializations.map((spec) => (
+              <button
+                key={spec}
+                onClick={() => handleSpecializationClick(spec)}
+                className="bg-gray-100 rounded-full py-1 px-4 text-sm font-openSans hover:bg-gray-200 transition-colors"
+              >
+                {spec}
+              </button>
+            ))}
+          </div>
+          <h3 className="text-xl font-lora pt-6 mb-6 text-center">
+            Recent Searches
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 font-openSans">
+            {filteredDevelopers.slice(0, 6).map((developer) => (
+              <DeveloperCard key={developer._id} developer={developer} />
+            ))}
+          </div>
         </div>
       </main>
+      <footer className="py-4 pt-6 bg-white">
+        <p className="text-center text-sm text-gray-600">
+          Copyright © 2024 Gigit. The Tech Band Originals
+        </p>
+      </footer>
+    </div>
+  );
+};
+
+const DeveloperCard = ({ developer }: { developer: Developer }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/profile/${developer._id}`);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); 
+  };
+
+  return (
+    <div
+      className="bg-white border border-gray-200 p-4 rounded-lg flex flex-col items-start cursor-pointer"
+      onClick={handleCardClick}
+    >
+      <div className="flex items-center mb-2">
+      <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-4xl mb-4 sm:mb-0 sm:mr-6">
+              <FontAwesomeIcon icon={faUser} />
+            </div>
+        <div>
+          <h3 className="text-lg font-bold">
+            {developer.first_name} {developer.last_name}
+          </h3>
+          <p className="text-sm text-gray-600">{developer.specialization}</p>
+        </div>
+      </div>
+      <div className="flex items-center mb-1 w-full">
+        <FaMapMarkerAlt className="text-gray-400 mr-2" />
+        <p className="text-sm text-gray-600">{developer.location}</p>
+      </div>
+      <div className="flex items-center mb-3 w-full">
+        <FaDollarSign className="text-gray-400 mr-2" />
+        <p className="text-sm text-gray-600">{developer.rate}/hour</p>
+      </div>
+      <div className="flex gap-2 mt-auto w-full">
+        <Button
+          className="bg-red-500 text-white font-bold px-3 py-1 rounded-full flex items-center justify-center flex-1"
+          onClick={handleButtonClick}
+        >
+          <FaPhoneAlt className="mr-2" /> Call
+        </Button>
+        <Button
+          className="bg-white text-red-500 border border-red-500 font-bold px-3 py-1 rounded-full flex items-center justify-center flex-1"
+          onClick={(e) => {
+            handleButtonClick(e);
+            window.location.href = `https://wa.me/${developer.phone_number}`;
+          }}
+        >
+          <FaWhatsapp className="mr-2" /> Chat
+        </Button>
+      </div>
     </div>
   );
 };
